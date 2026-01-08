@@ -2,495 +2,525 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>GA5 Unit 4 – Stumbling upon the Past (Practice)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GA5 • Unit 4 – Stumbling upon the Past (Vocabulary + Reading)</title>
   <style>
-    /* ====== Dark / GA-style aesthetic (no external libs) ====== */
     :root{
-      --bg0:#0b1320;
-      --bg1:#0e1b2c;
-      --card:rgba(255,255,255,0.06);
-      --card2:rgba(255,255,255,0.08);
-      --line:rgba(255,255,255,0.12);
-      --text:rgba(255,255,255,0.92);
-      --muted:rgba(255,255,255,0.68);
-      --muted2:rgba(255,255,255,0.55);
-      --good:rgba(120,255,170,0.20);
-      --bad:rgba(255,120,120,0.18);
-      --accent:rgba(120,170,255,0.28);
-      --accent2:rgba(120,170,255,0.18);
-      --shadow:0 18px 60px rgba(0,0,0,0.45);
-      --radius:22px;
+      --bg0:#081423;
+      --bg1:#0b1e33;
+      --panel: rgba(255,255,255,0.06);
+      --panel2: rgba(255,255,255,0.08);
+      --stroke: rgba(255,255,255,0.10);
+      --stroke2: rgba(255,255,255,0.14);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.70);
+      --muted2: rgba(255,255,255,0.55);
+      --good: rgba(66, 245, 165, 0.95);
+      --bad: rgba(255, 120, 120, 0.95);
+      --warn: rgba(255, 214, 120, 0.95);
+      --accent: rgba(120, 170, 255, 0.95);
+      --shadow: 0 18px 60px rgba(0,0,0,0.45);
+      --radius: 22px;
+      --radius2: 16px;
+      --font: "Century Gothic", "Trebuchet MS", Arial, sans-serif;
     }
 
-    *{ box-sizing:border-box; }
+    *{ box-sizing: border-box; }
+    html,body{ height:100%; }
     body{
       margin:0;
-      min-height:100vh;
-      font-family: "Century Gothic", "AppleGothic", "URW Gothic L", Arial, sans-serif;
-      color:var(--text);
+      font-family: var(--font);
+      color: var(--text);
       background:
-        radial-gradient(1200px 700px at 10% 10%, #163256 0%, transparent 55%),
-        radial-gradient(900px 600px at 90% 20%, #2a2f63 0%, transparent 50%),
-        radial-gradient(900px 700px at 20% 90%, #0f3a3a 0%, transparent 55%),
+        radial-gradient(1200px 700px at 20% 10%, rgba(120,170,255,0.16), transparent 65%),
+        radial-gradient(900px 600px at 80% 30%, rgba(66,245,165,0.10), transparent 60%),
+        radial-gradient(800px 520px at 55% 85%, rgba(255,170,90,0.10), transparent 60%),
         linear-gradient(180deg, var(--bg0), var(--bg1));
-      padding: 18px;
+      display:flex;
+      justify-content:center;
+      padding: 26px;
     }
 
-    .app{ max-width:1180px; margin:0 auto; }
+    .shell{
+      width:min(1280px, 100%);
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
 
-    /* ===== Header ===== */
-    .topbar{
+    /* Header */
+    .header{
       display:flex;
       align-items:center;
-      gap:18px;
-      padding:18px 20px;
-      border-radius:26px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
-      border:1px solid var(--line);
+      justify-content:space-between;
+      gap:16px;
+      padding:18px 18px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.05));
+      border:1px solid var(--stroke);
       box-shadow: var(--shadow);
-      overflow:hidden;
-      position:relative;
+      backdrop-filter: blur(10px);
     }
-    .topbar::after{
-      content:"";
-      position:absolute;
-      inset:-60px -120px auto auto;
-      width:420px; height:220px;
-      background: radial-gradient(circle at 30% 40%, rgba(255,255,255,0.12), transparent 60%);
-      transform: rotate(-8deg);
-      pointer-events:none;
+    .head-left{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      min-width: 320px;
     }
-
     .logo{
-      width:54px; height:54px;
-      border-radius:16px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,0.06);
+      width:56px;
+      height:56px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.10);
+      border:1px solid var(--stroke2);
       display:flex;
       align-items:center;
       justify-content:center;
       overflow:hidden;
-      flex:0 0 auto;
+      flex: 0 0 auto;
     }
-    .logo img{ width:100%; height:100%; object-fit:contain; }
-
-    .titlewrap{ flex:1 1 auto; min-width: 260px; }
+    .logo img{
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      display:block;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.35));
+    }
+    .title-wrap{ display:flex; flex-direction:column; gap:6px; }
     .title{
-      font-size:42px;
-      font-weight:700;
-      letter-spacing:0.3px;
-      line-height:1.05;
-      margin:0 0 6px 0;
+      font-size: 40px;
+      line-height: 1.05;
+      letter-spacing: 0.2px;
+      margin:0;
+      font-weight: 700;
     }
     .subtitle{
       margin:0;
-      font-size:18px;
-      color:var(--muted);
-      letter-spacing:0.2px;
+      font-size: 18px;
+      color: var(--muted);
+      letter-spacing: 0.2px;
     }
 
-    .chips{
+    .head-right{
       display:flex;
-      gap:12px;
-      flex:0 0 auto;
       align-items:center;
+      gap:10px;
       flex-wrap:wrap;
       justify-content:flex-end;
     }
-    .chip{
-      padding:12px 16px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,0.06);
-      color:var(--muted);
-      font-weight:600;
-      min-width:150px;
-      text-align:center;
-      backdrop-filter: blur(6px);
+    .pill{
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.07);
+      border:1px solid var(--stroke);
+      color: var(--muted);
+      display:flex;
+      gap:8px;
+      align-items:center;
+      min-height: 40px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.20);
     }
-    .chip b{ color: var(--text); }
+    .pill b{ color: var(--text); font-weight:700; }
+    .bar{
+      width: 220px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.10);
+      border:1px solid rgba(255,255,255,0.10);
+      overflow:hidden;
+    }
+    .bar > div{
+      height:100%;
+      width: 0%;
+      background: linear-gradient(90deg, rgba(120,170,255,0.95), rgba(66,245,165,0.90));
+      border-radius: 999px;
+      transition: width 260ms ease;
+    }
 
-    /* ===== Layout ===== */
+    /* Layout */
     .grid{
-      margin-top:18px;
       display:grid;
-      grid-template-columns: 1.45fr 0.9fr;
-      gap:18px;
+      grid-template-columns: 1.55fr 0.95fr;
+      gap: 18px;
       align-items:start;
-    }
-    @media (max-width: 960px){
-      .grid{ grid-template-columns: 1fr; }
-      .chip{ min-width: 140px; }
-      .title{ font-size:34px; }
     }
 
     .card{
       border-radius: var(--radius);
-      border:1px solid var(--line);
-      background: rgba(255,255,255,0.06);
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.05));
+      border:1px solid var(--stroke);
       box-shadow: var(--shadow);
-      overflow:hidden;
+      backdrop-filter: blur(10px);
     }
-    .card-inner{ padding:18px; }
 
-    /* ===== Left (Task) ===== */
-    .section-tag{
-      display:inline-block;
-      padding:8px 12px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,0.18);
-      color: var(--muted);
-      font-weight:700;
-      letter-spacing:0.2px;
-      margin-bottom:10px;
+    .main{
+      padding: 18px;
+      min-height: 560px;
+      position:relative;
     }
-    .question{
-      font-size:22px;
-      line-height:1.35;
-      margin:0 0 14px;
-      white-space:pre-line;
+
+    .side{
+      padding: 16px;
+      position:sticky;
+      top: 18px;
+      max-height: calc(100vh - 52px);
+      overflow:auto;
+    }
+
+    .section-tag{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.22);
+      border:1px solid var(--stroke);
+      color: var(--muted);
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+    .section-tag b{ color: var(--text); }
+
+    .q-title{
+      font-size: 30px;
+      margin: 4px 0 8px;
+      line-height:1.15;
+      letter-spacing:0.2px;
+    }
+    .q-sub{
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.4;
+    }
+
+    .prompt{
+      font-size: 22px;
+      line-height: 1.35;
+      margin: 10px 0 14px;
+      white-space: pre-line;
     }
 
     .options{
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap:12px;
+      gap: 12px;
+      margin-top: 10px;
     }
-    @media (max-width:560px){
-      .options{ grid-template-columns: 1fr; }
-    }
-
-    .opt-btn{
-      padding:14px 14px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,0.12);
+    .btn{
+      font-family: var(--font);
+      border-radius: 18px;
+      padding: 16px 16px;
       background: rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.12);
       color: var(--text);
-      font-size:18px;
       cursor:pointer;
       text-align:left;
+      font-size: 20px;
+      line-height:1.2;
+      transition: transform .08s ease, background .12s ease, border-color .12s ease;
+      min-height: 60px;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.085);
+      border-color: rgba(255,255,255,0.18);
+    }
+    .btn:disabled{
+      cursor: default;
+      opacity: 0.55;
+      transform: none;
+    }
+
+    /* Footer controls */
+    .controls{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.10);
+    }
+    .left-controls, .right-controls{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+    }
+
+    .soft{
+      border-radius: 999px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.12);
+      color: var(--text);
+      cursor:pointer;
+      font-size: 15px;
+      font-family: var(--font);
+    }
+    .soft:hover{ background: rgba(255,255,255,0.085); }
+    .primary{
+      border-radius: 999px;
+      padding: 12px 16px;
+      background: linear-gradient(90deg, rgba(120,170,255,0.95), rgba(66,245,165,0.92));
+      border: none;
+      color: rgba(0,0,0,0.82);
+      cursor:pointer;
+      font-weight: 700;
+      font-size: 16px;
+      font-family: var(--font);
+      box-shadow: 0 14px 35px rgba(0,0,0,0.28);
+    }
+    .primary:disabled{
+      opacity: 0.55;
+      cursor: default;
+      box-shadow:none;
+    }
+
+    /* Feedback */
+    .feedback{
+      margin-top: 12px;
+      padding: 14px 14px;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,0.10);
+      background: rgba(0,0,0,0.18);
+      min-height: 56px;
+      display:flex;
+      flex-direction:column;
+      gap: 8px;
+    }
+    .line{
+      display:flex;
+      gap: 10px;
+      align-items:flex-start;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.35;
+    }
+    .good{ color: var(--good); }
+    .bad{ color: var(--bad); }
+    .warn{ color: var(--warn); }
+
+    /* Sidebar blocks */
+    .side h3{
+      margin: 6px 0 10px;
+      font-size: 18px;
+      color: var(--text);
+    }
+    .side p, .side li{
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 14.5px;
+    }
+    .mini{
+      border-radius: var(--radius2);
+      background: rgba(0,0,0,0.22);
+      border:1px solid rgba(255,255,255,0.10);
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .vocab-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 10px;
+      margin-top: 8px;
+    }
+    .chip{
+      border-radius: 12px;
+      padding: 10px 10px;
+      background: rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.10);
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    .muted-note{
+      color: var(--muted2);
+      font-size: 12.5px;
+      margin-top: 8px;
+    }
+    .hide{
+      display:none !important;
+    }
+
+    /* Spelling (tile click) */
+    .spell-wrap{
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .spell-target{
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(0,0,0,0.18);
+      border:1px solid rgba(255,255,255,0.12);
+      min-height: 72px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap:wrap;
+    }
+    .spell-built{
+      font-size: 26px;
+      letter-spacing: 0.6px;
+      min-height: 32px;
+    }
+    .spell-hint{
+      color: var(--muted);
+      font-size: 14px;
+      text-align:right;
+    }
+    .tiles{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+    }
+    .tile{
+      font-family: var(--font);
+      border-radius: 14px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.12);
+      color: var(--text);
+      cursor:pointer;
+      font-size: 18px;
+      min-width: 44px;
+      text-align:center;
       transition: transform .08s ease, background .12s ease, border-color .12s ease;
       user-select:none;
     }
-    .opt-btn:hover{
+    .tile:hover{
       transform: translateY(-1px);
-      background: rgba(255,255,255,0.09);
+      background: rgba(255,255,255,0.085);
       border-color: rgba(255,255,255,0.18);
     }
-    .opt-btn:disabled{
-      opacity:0.6;
-      cursor:default;
+    .tile:disabled{
+      opacity: 0.35;
+      cursor: default;
       transform:none;
     }
 
-    /* ===== Feedback ===== */
-    .feedback{
-      margin-top:14px;
-      border-radius:18px;
-      border:1px solid var(--line);
+    /* Reading comprehension excerpts */
+    .excerpt{
+      margin-top: 10px;
+      padding: 14px;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,0.10);
       background: rgba(0,0,0,0.18);
-      padding:14px 14px;
-      color: var(--muted);
-      min-height:56px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-    .feedback .msg{
-      font-size:16px;
-      line-height:1.35;
-      flex:1 1 auto;
-      min-width:240px;
-    }
-    .feedback.good{
-      background: var(--good);
-      border-color: rgba(120,255,170,0.28);
-      color: rgba(255,255,255,0.92);
-    }
-    .feedback.bad{
-      background: var(--bad);
-      border-color: rgba(255,120,120,0.28);
-      color: rgba(255,255,255,0.92);
-    }
-
-    .actions{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex:0 0 auto;
-    }
-    .btn{
-      border:none;
-      border-radius:999px;
-      padding:12px 16px;
-      font-weight:700;
-      cursor:pointer;
-      background: rgba(255,255,255,0.08);
-      color: var(--text);
-      border:1px solid rgba(255,255,255,0.14);
-      transition: transform .08s ease, background .12s ease;
-      user-select:none;
-    }
-    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,0.11); }
-    .btn.primary{ background: var(--accent); border-color: rgba(120,170,255,0.28); }
-    .btn.primary:hover{ background: rgba(120,170,255,0.34); }
-    .btn:disabled{ opacity:0.5; cursor:default; transform:none; }
-
-    /* ===== Right panel ===== */
-    .panel-title{
-      margin:0 0 10px;
-      font-size:18px;
-      color: var(--muted);
-      font-weight:800;
-      letter-spacing:0.2px;
-    }
-    .panel-block{
-      border-radius:18px;
-      border:1px solid var(--line);
-      background: rgba(0,0,0,0.18);
-      padding:14px;
-      margin-bottom:12px;
-    }
-    .kpi{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      color:var(--muted);
-      font-weight:700;
-    }
-    .kpi b{ color: var(--text); }
-
-    .progress-wrap{
-      margin-top:10px;
-      height:10px;
-      border-radius:999px;
-      background: rgba(255,255,255,0.08);
-      border:1px solid rgba(255,255,255,0.12);
-      overflow:hidden;
-    }
-    .progress-bar{
-      height:100%;
-      width:0%;
-      background: rgba(120,170,255,0.35);
-    }
-
-    .howto{
-      margin:0;
-      padding-left:18px;
-      color: var(--muted);
-      line-height:1.45;
-    }
-
-    .vocab-list{
-      color: var(--muted);
-      line-height:1.55;
-      margin:0;
-      padding-left: 16px;
-    }
-    .vocab-list li{ margin:4px 0; }
-
-    .pill{
-      display:inline-block;
-      padding:7px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-      color: var(--muted);
-      font-weight:700;
-      font-size:13px;
-      margin-bottom:10px;
-    }
-
-    /* ===== Spelling (click tiles) ===== */
-    #spelling-area{ display:none; margin-top:6px; }
-    .spelling-prompt{
-      font-size:18px;
-      color: var(--muted);
-      margin: 0 0 10px;
-      line-height:1.45;
-    }
-    .built-row{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      margin-bottom:12px;
-      flex-wrap:wrap;
-    }
-    .built-box{
-      flex:1 1 auto;
-      min-height:46px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,0.14);
-      background: rgba(0,0,0,0.18);
-      padding:10px 12px;
-      display:flex;
-      align-items:center;
-      font-size:18px;
-      letter-spacing:0.8px;
-    }
-    .tile-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-bottom:12px;
-    }
-    .tile-btn{
-      min-width:46px;
-      padding:12px 14px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-      color: var(--text);
-      font-weight:800;
-      cursor:pointer;
-      user-select:none;
-      transition: transform .08s ease, background .12s ease;
-    }
-    .tile-btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,0.10); }
-    .tile-btn:disabled{ opacity:0.35; cursor:default; transform:none; }
-
-    .hint{
-      margin-top:12px;
-      padding:12px 14px;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,0.14);
-      background: rgba(0,0,0,0.18);
-      color: var(--muted);
-      line-height:1.4;
-      display:none;
-    }
-
-    /* ===== Reading comprehension (final) ===== */
-    .passage{
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,0.14);
-      background: rgba(0,0,0,0.18);
-      padding:14px;
-      color: var(--muted);
-      line-height:1.5;
-      margin-top:10px;
+      color: rgba(255,255,255,0.85);
+      font-size: 16px;
+      line-height: 1.5;
       white-space: pre-line;
     }
 
-    .footer-note{
-      margin-top:12px;
-      color: var(--muted2);
-      font-size:13px;
-      line-height:1.45;
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+      .side{ position:relative; top:auto; max-height:none; }
+      .head-left{ min-width: unset; }
+      .title{ font-size: 34px; }
     }
   </style>
 </head>
 
 <body>
-  <div class="app">
-    <!-- ====== HEADER ====== -->
-    <div class="topbar">
-      <div class="logo">
-        <!-- Put your file in the SAME repo folder as index.html (e.g., logo.png) -->
-        <img src="logo.png" alt="Logo" />
+  <div class="shell">
+    <div class="header card">
+      <div class="head-left">
+        <div class="logo" title="Logo">
+          <!-- Keep this file in the SAME GitHub repo folder as index.html -->
+          <img src="logo.png" alt="GA logo" onerror="this.style.display='none'; this.parentElement.style.opacity='0.7';" />
+        </div>
+        <div class="title-wrap">
+          <h1 class="title">Unit 4 – Stumbling upon the Past</h1>
+          <p class="subtitle">Vocabulary – Meaning • Vocabulary – Use • Vocabulary – Spelling • Reading Comprehension</p>
+        </div>
       </div>
 
-      <div class="titlewrap">
-        <h1 class="title">Unit 4 – Stumbling upon the Past</h1>
-        <p class="subtitle">Vocabulary practice · Meaning → Use → Spelling (Unscramble) → Reading Comprehension · Review Mode</p>
-      </div>
-
-      <div class="chips">
-        <div class="chip">Progress: <b id="chip-progress">1/??</b></div>
-        <div class="chip">Score: <b id="chip-score">0</b></div>
-        <div class="chip">Mode: <b id="chip-mode">Main</b></div>
+      <div class="head-right">
+        <div class="pill"><span>Progress:</span> <b id="progressText">1/25</b></div>
+        <div class="pill"><span>Score:</span> <b id="scoreText">0</b></div>
+        <div class="pill"><span>Mode:</span> <b id="modeText">Main</b></div>
+        <div class="pill" style="gap:12px;">
+          <span style="color:var(--muted);">Progress bar</span>
+          <div class="bar" aria-label="Progress bar"><div id="progressBar"></div></div>
+        </div>
       </div>
     </div>
 
-    <!-- ====== MAIN GRID ====== -->
     <div class="grid">
-      <!-- LEFT: TASK -->
-      <div class="card">
-        <div class="card-inner">
-          <div class="section-tag" id="section-tag">Vocabulary – Meaning</div>
+      <!-- Main -->
+      <div class="main card">
+        <div class="section-tag" id="sectionTag"><b>Vocabulary – Meaning</b> <span id="sectionMini">• choose the best word</span></div>
 
-          <div class="question" id="question-text">Loading…</div>
+        <div class="q-title" id="qTitle">Question</div>
+        <div class="q-sub" id="qSub">Read carefully. Use meaning + context.</div>
 
-          <!-- Multiple-choice area -->
-          <div class="options" id="options-container"></div>
+        <div class="prompt" id="prompt"></div>
 
-          <!-- Spelling area (click tiles) -->
-          <div id="spelling-area">
-            <div class="spelling-prompt" id="spelling-prompt"></div>
+        <!-- Multiple choice -->
+        <div class="options" id="options"></div>
 
-            <div class="built-row">
-              <div class="built-box" id="built-box"></div>
-              <button class="btn" id="clear-built" type="button">Clear</button>
+        <!-- Spelling (click tiles) -->
+        <div class="spell-wrap hide" id="spellWrap">
+          <div class="spell-target">
+            <div>
+              <div class="spell-built" id="spellBuilt">—</div>
+              <div class="muted-note" id="spellNote">Click letters to build the word. Use Backspace if needed.</div>
             </div>
-
-            <div class="tile-row" id="tile-row"></div>
-
-            <div class="actions">
-              <button class="btn primary" id="check-spelling" type="button">Check</button>
-              <button class="btn" id="try-again" type="button" style="display:none;">Try again</button>
-            </div>
-
-            <div class="hint" id="spelling-hint"></div>
+            <div class="spell-hint" id="spellPattern">Hint: —</div>
           </div>
 
-          <!-- Feedback + Next -->
-          <div class="feedback" id="feedback">
-            <div class="msg" id="feedback-msg">Click an answer. If wrong, read the clue and try again. Click Next only when you understand.</div>
-            <div class="actions">
-              <button class="btn" id="restart-btn" type="button">Restart</button>
-              <button class="btn primary" id="next-btn" type="button" disabled>Next</button>
-            </div>
-          </div>
+          <div class="tiles" id="tiles"></div>
 
-          <div class="footer-note">
-            Teacher note: This practice forces re-tries. Students cannot skip with “Next” unless correct.
+          <div class="left-controls">
+            <button class="soft" id="backspaceBtn">Backspace</button>
+            <button class="soft" id="clearBtn">Clear</button>
+            <button class="soft hide" id="tryAgainBtn">Try again</button>
+          </div>
+        </div>
+
+        <div class="feedback" id="feedback">
+          <div class="line" id="fbLine1">Choose an answer. If you are wrong, you will get a helpful clue and you can try again.</div>
+          <div class="line" id="fbLine2"></div>
+        </div>
+
+        <div class="controls">
+          <div class="left-controls">
+            <!-- Restart moved away from students' easy clicking -->
+            <button class="soft" id="restartBtn" title="Restart the whole practice">Restart (teacher)</button>
+          </div>
+          <div class="right-controls">
+            <button class="primary" id="nextBtn" disabled>Next</button>
           </div>
         </div>
       </div>
 
-      <!-- RIGHT: INFO PANEL -->
-      <div class="card" id="vocab-panel">
-        <div class="card-inner">
-          <h3 class="panel-title">Quick Info</h3>
+      <!-- Sidebar -->
+      <div class="side card" id="sidebar">
+        <div class="mini">
+          <h3>How to do well</h3>
+          <ul>
+            <li><b>Meaning:</b> Think “What does the word mean?”</li>
+            <li><b>Use:</b> Check grammar and the sentence idea. Which word fits best?</li>
+            <li><b>Spelling:</b> Build the word carefully. If wrong, use the pattern clue and try again.</li>
+            <li><b>Reading:</b> Re-read the excerpt and answer using evidence.</li>
+          </ul>
+          <p class="muted-note">Tip: Do not rush. Click Next only when you understand.</p>
+        </div>
 
-          <div class="panel-block">
-            <div class="kpi"><span>Current task</span><b id="kpi-task">Vocabulary</b></div>
-            <div class="kpi" style="margin-top:8px;"><span>Correct / Total</span><b id="kpi-ct">0 / 0</b></div>
-            <div class="progress-wrap" aria-label="progress">
-              <div class="progress-bar" id="progress-bar"></div>
-            </div>
-          </div>
+        <div class="mini" id="vocabBox">
+          <h3>Vocabulary list</h3>
+          <div class="vocab-grid" id="vocabGrid"></div>
+          <p class="muted-note">This list will hide during Spelling.</p>
+        </div>
 
-          <div class="panel-block">
-            <div class="pill">How to play</div>
-            <ul class="howto">
-              <li>Read the sentence/definition carefully.</li>
-              <li>If wrong: read the clue, then try again.</li>
-              <li>Click <b>Next</b> only when you understand.</li>
-              <li>For spelling: click letters to build the word.</li>
-            </ul>
-          </div>
-
-          <div class="panel-block" id="vocab-list-block">
-            <div class="pill">Vocabulary list (Unit 4)</div>
-            <ul class="vocab-list" id="vocab-list">
-              <!-- filled by JS -->
-            </ul>
-          </div>
-
-          <div class="panel-block">
-            <div class="pill">Progress tips</div>
-            <ul class="howto">
-              <li>Use meaning clues (who/what/where/action), not first-letter clues.</li>
-              <li>Look for collocations (e.g., “volcanic ash”, “sedimentary rock”).</li>
-              <li>For verbs, check the action in the sentence (discover / examine / excavate).</li>
-            </ul>
-          </div>
-
+        <div class="mini">
+          <h3>Progress tips</h3>
+          <ul>
+            <li>If you miss a question, you will see it again in <b>Review Mode</b>.</li>
+            <li>Focus on <b>context clues</b>: who, where, what happened, and why.</li>
+            <li>For verbs in the story, notice the <b>past tense</b> (e.g., discovered, examined, tripped).</li>
+          </ul>
         </div>
       </div>
     </div>
@@ -498,616 +528,728 @@
 
   <script>
     /***********************
-     * DATA: Unit 4 vocab
+     * Unit 4 vocab list
      ***********************/
-    const vocabGetReady = [
-      "ash",
-      "dinosaur",
-      "discover",
-      "examine",
-      "excavate",
-      "layers",
-      "paleontologist",
-      "pastime",
-      "ravine",
-      "sedimentary rock",
-      "skull"
+    const VOCAB = [
+      "ash","dinosaur","discover","examine","excavate","layers",
+      "paleontologist","pastime","ravine","sedimentary rock","skull",
+      "determine","dream","favorite","tripped"
     ];
-    const vocabInContext = ["determine", "dream", "favorite", "tripped"];
 
-    // Build right-panel vocab list
-    const vocabListEl = document.getElementById("vocab-list");
-    [...vocabGetReady, ...vocabInContext].forEach(w=>{
-      const li = document.createElement("li");
-      li.textContent = w;
-      vocabListEl.appendChild(li);
+    /***********************
+     * Question bank (25 total)
+     * Order: Meaning -> Use -> Spelling -> Reading
+     ***********************/
+    const QUESTIONS = [
+      // =======================
+      // VOCAB – MEANING (10)
+      // =======================
+      {
+        section: "Vocabulary – Meaning",
+        type: "mc",
+        word: "paleontologist",
+        prompt: "Which word means:\nA scientist who studies fossils and ancient life on Earth?",
+        options: ["paleontologist","pastime","dinosaur","dream"],
+        answer: 0,
+        hint: "Look for a job word (a kind of scientist). The story mentions this person coming from a foundation to study the find."
+      },
+      {
+        section: "Vocabulary – Meaning",
+        type: "mc",
+        word: "dinosaur",
+        prompt: "Which word means:\nAn extinct animal that lived millions of years ago (often very large)?",
+        options: ["dinosaur","skull","ravine","ash"],
+        answer: 0,
+        hint: "This is the animal the bones belonged to. It is not alive today."
+      },
+      {
+        section: "Vocabulary – Meaning",
+        type: "mc",
+        word: "ravine",
+        prompt: "Which word means:\nA deep, narrow valley or gap in the ground (often with steep sides)?",
+        options: ["layers","ravine","ash","pastime"],
+        answer: 1,
+        hint: "In the story, Javier runs down into this place where the object is sticking out of the ground."
+      },
+      {
+        section: "Vocabulary – Meaning",
+        type: "mc",
+        word: "skull",
+        prompt: "Which word means:\nThe hard bone of the head that protects the brain?",
+        options: ["skull","dinosaur","layers","ash"],
+        answer: 0,
+        hint: "The story says they found more bones, and also this part."
+      },
+      {
+        section: "Vocabulary – Meaning",
+        type: "mc",
+        word: "ash",
+        prompt: "Which word means:\nThe soft gray powder left after something burns (like wood)?",
+        options: ["ash","layers","sedimentary rock","pastime"],
+        answer: 0,
+        hint: "Think of what is left after a fire."
+      },
+      {
+        section: "Vocabulary – Meaning",
+        type: "mc",
+        word: "layers",
+        prompt: "Which word means:\nLevels of material placed on top of each other?",
+        options: ["layers","ravine","dream","tripped"],
+        answer: 0,
+        hint: "The story explains rock is under the ground in these, and ash can be above and below."
+      },
+      {
+        section: "Vocabulary – Meaning",
+        type: "mc",
+        word: "sedimentary rock",
+        prompt: "Which phrase means:\nA kind of rock made over time from small pieces (sediment) that press together in layers?",
+        options: ["sedimentary rock","ash","skull","pastime"],
+        answer: 0,
+        hint: "The paleontologist explains the bone was buried in this kind of rock."
+      },
+      {
+        section: "Vocabulary – Meaning",
+        type: "mc",
+        word: "pastime",
+        prompt: "Which word means:\nAn activity you do for fun in your free time?",
+        options: ["pastime","determine","excavate","examine"],
+        answer: 0,
+        hint: "The story says Javier's favorite one was to explore the hills and fields."
+      },
+      {
+        section: "Vocabulary – Meaning",
+        type: "mc",
+        word: "determine",
+        prompt: "Which word means:\nTo find out something by checking evidence or doing a process?",
+        options: ["determine","discover","dream","tripped"],
+        answer: 0,
+        hint: "The paleontologist says they need to do this to know how old it is."
+      },
+      {
+        section: "Vocabulary – Meaning",
+        type: "mc",
+        word: "tripped",
+        prompt: "Which word means:\nTo stumble because your foot hits something?",
+        options: ["favorite","tripped","excavate","layers"],
+        answer: 1,
+        hint: "Javier says this happened when he stepped on something in the ravine."
+      },
+
+      // =======================
+      // VOCAB – USE (10)
+      // =======================
+      {
+        section: "Vocabulary – Use",
+        type: "mc",
+        word: "discovered",
+        prompt: "Choose the best word:\nIn 2003, scientists __________ dinosaur bones near the village.",
+        options: ["discovered","dream","layers","skull"],
+        answer: 0,
+        hint: "This sentence is about finding something for the first time in the past."
+      },
+      {
+        section: "Vocabulary – Use",
+        type: "mc",
+        word: "examined",
+        prompt: "Choose the best word:\nThe paleontologist came to the ravine and __________ the boy’s discovery carefully.",
+        options: ["examined","tripped","favorite","ash"],
+        answer: 0,
+        hint: "This is what a scientist does to look closely at evidence."
+      },
+      {
+        section: "Vocabulary – Use",
+        type: "mc",
+        word: "ravine",
+        prompt: "Choose the best word:\nJavier ran down into the __________ to get the kite.",
+        options: ["ravine","layers","pastime","skull"],
+        answer: 0,
+        hint: "This is a place in the ground, like a deep gap or small valley."
+      },
+      {
+        section: "Vocabulary – Use",
+        type: "mc",
+        word: "sedimentary rock",
+        prompt: "Choose the best phrase:\nThe bone was buried in __________ under the ground.",
+        options: ["sedimentary rock","pastime","favorite","dream"],
+        answer: 0,
+        hint: "The text explains the bone was in a type of rock, not in sand or water."
+      },
+      {
+        section: "Vocabulary – Use",
+        type: "mc",
+        word: "layers",
+        prompt: "Choose the best word:\nVolcanic ash can be found above and below different rock __________.",
+        options: ["layers","ravines","skulls","pastimes"],
+        answer: 0,
+        hint: "Think: levels stacked on top of each other."
+      },
+      {
+        section: "Vocabulary – Use",
+        type: "mc",
+        word: "ash",
+        prompt: "Choose the best word:\nAfter a fire, you might see __________ on the ground.",
+        options: ["ash","dinosaur","skull","ravine"],
+        answer: 0,
+        hint: "This is the powder left behind when something burns."
+      },
+      {
+        section: "Vocabulary – Use",
+        type: "mc",
+        word: "skull",
+        prompt: "Choose the best word:\nThe team found more bones, as well as a __________.",
+        options: ["skull","layers","pastime","ash"],
+        answer: 0,
+        hint: "This is the head bone."
+      },
+      {
+        section: "Vocabulary – Use",
+        type: "mc",
+        word: "excavating",
+        prompt: "Choose the best word:\nSoon, the team began __________ the area around the bone to find more pieces.",
+        options: ["excavating","dream","favorite","tripped"],
+        answer: 0,
+        hint: "This means digging carefully to uncover something."
+      },
+      {
+        section: "Vocabulary – Use",
+        type: "mc",
+        word: "determine",
+        prompt: "Choose the best word:\nScientists use evidence to __________ how old the bone is.",
+        options: ["determine","discover","tripped","skull"],
+        answer: 0,
+        hint: "This means to find out the answer (using a method)."
+      },
+      {
+        section: "Vocabulary – Use",
+        type: "mc",
+        word: "pastime",
+        prompt: "Choose the best word:\nReading comic books can be a fun __________ after school.",
+        options: ["pastime","ravine","ash","layers"],
+        answer: 0,
+        hint: "This is something you do for fun in your free time."
+      },
+
+      // =======================
+      // VOCAB – SPELLING (Unscramble, click tiles) (5)
+      // =======================
+      {
+        section: "Vocabulary – Spelling",
+        type: "spell",
+        word: "paleontologist",
+        prompt: "Spelling (click to build):\nA scientist who studies fossils and ancient life.",
+        clueStart: 3
+      },
+      {
+        section: "Vocabulary – Spelling",
+        type: "spell",
+        word: "sedimentary rock",
+        prompt: "Spelling (click to build):\nThe type of rock the bone was buried in (two words).",
+        clueStart: 3
+      },
+      {
+        section: "Vocabulary – Spelling",
+        type: "spell",
+        word: "ravine",
+        prompt: "Spelling (click to build):\nA deep narrow valley in the ground.",
+        clueStart: 2
+      },
+      {
+        section: "Vocabulary – Spelling",
+        type: "spell",
+        word: "excavate",
+        prompt: "Spelling (click to build):\nTo dig carefully to uncover something.",
+        clueStart: 2
+      },
+      {
+        section: "Vocabulary – Spelling",
+        type: "spell",
+        word: "determine",
+        prompt: "Spelling (click to build):\nTo find out by using evidence.",
+        clueStart: 2
+      },
+
+      // =======================
+      // READING COMPREHENSION (2)
+      // =======================
+      {
+        section: "Reading Comprehension",
+        type: "mc",
+        word: "RC1",
+        prompt:
+          "Read the excerpt. Then answer:\nWhy does the paleontologist talk about volcanic ash and rock layers?\n\n(Choose the best answer.)",
+        excerpt:
+          "“This bone was buried in sedimentary rock, which lies in layers under the ground. We’ll look for volcanic ash below and above this rock layer. Through a special process, we can find out the ages of those layers of ash. Then we’ll know that the dinosaur died sometime between those two ages.”",
+        options: [
+          "To estimate the dinosaur’s age by comparing the ages of ash layers above and below the rock layer",
+          "To prove that the bone is made of ash instead of rock",
+          "To explain why the village has a ravine near the field",
+          "To show that dinosaurs are still alive today"
+        ],
+        answer: 0,
+        hint: "Focus on the logic: ash layers have ages → that helps narrow down the time range."
+      },
+      {
+        section: "Reading Comprehension",
+        type: "mc",
+        word: "RC2",
+        prompt:
+          "Read the excerpt. Then answer:\nWhat is the best evidence that Javier is curious and excited?\n\n(Choose the best answer.)",
+        excerpt:
+          "Javier looked carefully at the object. “I don’t think it’s a rock,” he said excitedly. “I think it’s something else!”\n\nJavier and the boys ran home to tell Javier’s parents.",
+        options: [
+          "He looks carefully, says it is not a rock, and wants to tell adults quickly",
+          "He decides to leave the object and never talk about it again",
+          "He tries to hide the object so nobody can find it",
+          "He falls asleep because he is tired of exploring"
+        ],
+        answer: 0,
+        hint: "Look for actions + words that show interest and urgency."
+      }
+    ];
+
+    // Build sidebar vocab chips
+    const vocabGrid = document.getElementById("vocabGrid");
+    VOCAB.forEach(w => {
+      const d = document.createElement("div");
+      d.className = "chip";
+      d.textContent = w;
+      vocabGrid.appendChild(d);
     });
 
-    /***********************
-     * QUESTION BANK
-     * Order required by user:
-     * Vocabulary – Meaning → Vocabulary – Use → Vocabulary – Spelling → Reading Comprehension
-     ***********************/
-    const questions = [];
+    // UI refs
+    const sectionTag = document.getElementById("sectionTag");
+    const sectionMini = document.getElementById("sectionMini");
+    const qTitle = document.getElementById("qTitle");
+    const qSub = document.getElementById("qSub");
+    const promptEl = document.getElementById("prompt");
+    const optionsEl = document.getElementById("options");
+    const feedback1 = document.getElementById("fbLine1");
+    const feedback2 = document.getElementById("fbLine2");
+    const nextBtn = document.getElementById("nextBtn");
+    const restartBtn = document.getElementById("restartBtn");
 
-    // ===== Vocabulary – Meaning (context / definition choice) =====
-    const meaningItems = [
-      {
-        word:"paleontologist",
-        question:`Which word means:\nA scientist who studies fossils and ancient life on Earth?`,
-        options:["paleontologist","pastime","dinosaur","ravine"],
-        answer:0,
-        clue:"This is a job/science word (a person). It is about ancient life and fossils."
-      },
-      {
-        word:"ravine",
-        question:`Which word means:\nA deep, narrow valley or crack in the ground?`,
-        options:["layers","ravine","ash","skull"],
-        answer:1,
-        clue:"This is a landform. You can climb into it, but it can be hard to climb out."
-      },
-      {
-        word:"skull",
-        question:`Which word means:\nThe bony part of the head that protects the brain?`,
-        options:["skull","sedimentary rock","dinosaur","layers"],
-        answer:0,
-        clue:"This is part of a body. It is bone, not rock."
-      },
-      {
-        word:"ash",
-        question:`Which word means:\nSoft gray powder left after something burns (like wood)?`,
-        options:["ash","layers","excavate","dream"],
-        answer:0,
-        clue:"Think about what is left after a fire."
-      },
-      {
-        word:"layers",
-        question:`Which word means:\nLevels stacked on top of each other (one above another)?`,
-        options:["layers","favorite","discover","skull"],
-        answer:0,
-        clue:"Think of a cake or rock with levels."
-      },
-      {
-        word:"sedimentary rock",
-        question:`Which word means:\nA kind of rock made from small pieces that settle in layers over time?`,
-        options:["sedimentary rock","ash","ravine","pastime"],
-        answer:0,
-        clue:"This rock is connected to layers and settling over time."
-      }
-    ];
+    const progressText = document.getElementById("progressText");
+    const scoreText = document.getElementById("scoreText");
+    const modeText = document.getElementById("modeText");
+    const progressBar = document.getElementById("progressBar");
 
-    meaningItems.forEach(x => questions.push({
-      type:"mc",
-      section:"Vocabulary – Meaning",
-      word:x.word,
-      question:x.question,
-      options:x.options,
-      answer:x.answer,
-      clue:x.clue
-    }));
+    const sidebar = document.getElementById("sidebar");
+    const vocabBox = document.getElementById("vocabBox");
 
-    // ===== Vocabulary – Use (sentence choice) =====
-    const useItems = [
-      {
-        word:"discover",
-        question:`Choose the best word:\nIn 2003, scientists __________ dinosaur bones near the village.`,
-        options:["discover","layers","skull","pastime"],
-        answer:0,
-        clue:"They found something new for the first time."
-      },
-      {
-        word:"examine",
-        question:`Choose the best word:\nThe scientist came to the ravine and __________ the boy’s discovery carefully.`,
-        options:["dream","examine","tripped","favorite"],
-        answer:1,
-        clue:"This verb means to look closely and study."
-      },
-      {
-        word:"excavate",
-        question:`Choose the best word:\nSoon, the team began __________ the area around the bone to find more pieces.`,
-        options:["determine","discover","excavate","pastime"],
-        answer:2,
-        clue:"This action involves digging to uncover something."
-      },
-      {
-        word:"determine",
-        question:`Choose the best word:\nThey needed to __________ how old the bone was.`,
-        options:["determine","tripped","layers","skull"],
-        answer:0,
-        clue:"This verb means to find out the answer using facts or tests."
-      },
-      {
-        word:"pastime",
-        question:`Choose the best word:\nFlying a kite with friends was Javier’s favorite __________.`,
-        options:["pastime","ash","ravine","sedimentary rock"],
-        answer:0,
-        clue:"This is something you do for fun in your free time."
-      },
-      {
-        word:"tripped",
-        question:`Choose the best word:\n“I __________ on that,” Javier said, after he fell.`,
-        options:["examine","tripped","discover","determine"],
-        answer:1,
-        clue:"This happens when your foot catches on something and you fall."
-      }
-    ];
+    // spelling UI
+    const spellWrap = document.getElementById("spellWrap");
+    const spellBuilt = document.getElementById("spellBuilt");
+    const tilesEl = document.getElementById("tiles");
+    const backspaceBtn = document.getElementById("backspaceBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const tryAgainBtn = document.getElementById("tryAgainBtn");
+    const spellPattern = document.getElementById("spellPattern");
 
-    useItems.forEach(x => questions.push({
-      type:"mc",
-      section:"Vocabulary – Use",
-      word:x.word,
-      question:x.question,
-      options:x.options,
-      answer:x.answer,
-      clue:x.clue
-    }));
-
-    // ===== Vocabulary – Spelling (Unscramble click tiles) =====
-    // 5 words requested. Hide vocab panel during spelling.
-    const spellingItems = [
-      {
-        word:"paleontologist",
-        prompt:"Spelling (Unscramble): A scientist who studies fossils and ancient life.",
-        clue:"Build it in chunks. It is a long job/science word."
-      },
-      {
-        word:"sedimentary",
-        prompt:"Spelling (Unscramble): A word often used before “rock” to describe rock made in layers.",
-        clue:"Think: “sediment” + ending."
-      },
-      {
-        word:"excavate",
-        prompt:"Spelling (Unscramble): To dig to uncover something buried.",
-        clue:"This is a verb. It is an action people do at a dig site."
-      },
-      {
-        word:"determine",
-        prompt:"Spelling (Unscramble): To find out an answer (how old / how many / what it is).",
-        clue:"This is a verb often used with questions and tests."
-      },
-      {
-        word:"ravine",
-        prompt:"Spelling (Unscramble): A deep, narrow valley or cut in the ground.",
-        clue:"This is a landform word. Shorter than the other spelling words."
-      }
-    ];
-
-    spellingItems.forEach(x => questions.push({
-      type:"spell",
-      section:"Vocabulary – Spelling",
-      word:x.word,
-      prompt:x.prompt,
-      clue:x.clue
-    }));
-
-    // ===== Reading Comprehension (2 difficult questions with passage excerpt) =====
-    const rcItems = [
-      {
-        word:"RC1",
-        question:
-`Reading Comprehension (1/2)
-Read the excerpt. Then answer the question.
-
-EXCERPT:
-“In 2003, paleontologists found the bones of the largest dinosaur in Europe in a wheat field near the little village. When it was alive, this animal was over 38 meters long and had the weight of seven elephants.”
-
-QUESTION:
-Why does the author include the numbers “38 meters” and “seven elephants”?`,
-        options:[
-          "To inform the reader how large and heavy the dinosaur was",
-          "To entertain the reader with a funny joke",
-          "To persuade the reader to visit the village",
-          "To explain how to fly a kite"
-        ],
-        answer:0,
-        clue:"Those details are facts. They help you understand the size."
-      },
-      {
-        word:"RC2",
-        question:
-`Reading Comprehension (2/2)
-Read the excerpt. Then answer the question.
-
-EXCERPT:
-“This bone was buried in sedimentary rock, which lies in layers under the ground. We’ll look for volcanic ash below and above this rock layer. Through a special process, we can find out the ages of those layers of ash. Then we’ll know that the dinosaur died sometime between those two ages.”
-
-QUESTION:
-How does volcanic ash help scientists determine the dinosaur’s age?`,
-        options:[
-          "They compare the ages of ash layers above and below the rock to narrow the time period",
-          "They use the ash to paint the bones and make them easier to see",
-          "They melt the ash to create new rock for the museum",
-          "They taste the ash to see if it is old"
-        ],
-        answer:0,
-        clue:"The excerpt says ash layers have ages. Those ages create a time range."
-      }
-    ];
-
-    rcItems.forEach(x => questions.push({
-      type:"mc",
-      section:"Reading Comprehension",
-      word:x.word,
-      question:x.question,
-      options:x.options,
-      answer:x.answer,
-      clue:x.clue
-    }));
-
-    /***********************
-     * QUIZ ENGINE
-     ***********************/
-    let mainIndex = 0;
+    // State
     let score = 0;
-    let mode = "main"; // main | review
-    let wrongIndices = [];
+    let idx = 0;
+    let mode = "Main"; // or Review
+    let wrongIdxs = [];
     let reviewPos = 0;
-    let allowNext = false;
 
-    // Spelling state
-    let spellingState = {
-      answer:"",
-      built:"",
-      tiles:[],
-      used:[],
-      attempts:0,
-      q:null
-    };
+    // For spelling state
+    let built = "";
+    let tilePool = [];
+    let tileUsed = [];
 
-    const sectionTagEl = document.getElementById("section-tag");
-    const qTextEl = document.getElementById("question-text");
-    const optionsEl = document.getElementById("options-container");
-    const feedbackEl = document.getElementById("feedback");
-    const feedbackMsgEl = document.getElementById("feedback-msg");
-    const nextBtn = document.getElementById("next-btn");
-    const restartBtn = document.getElementById("restart-btn");
+    function setFeedback(line1, line2, tone){
+      feedback1.className = "line";
+      feedback2.className = "line";
+      feedback1.innerHTML = line1 || "";
+      feedback2.innerHTML = line2 || "";
 
-    const chipProgressEl = document.getElementById("chip-progress");
-    const chipScoreEl = document.getElementById("chip-score");
-    const chipModeEl = document.getElementById("chip-mode");
+      if(tone === "good"){
+        feedback1.classList.add("good");
+      } else if(tone === "bad"){
+        feedback1.classList.add("bad");
+      } else if(tone === "warn"){
+        feedback1.classList.add("warn");
+      }
+    }
 
-    const kpiTaskEl = document.getElementById("kpi-task");
-    const kpiCtEl = document.getElementById("kpi-ct");
-    const progressBarEl = document.getElementById("progress-bar");
+    function updateHeader(){
+      const total = getTotalCount();
+      const currentNum = getDisplayedNumber();
+      progressText.textContent = `${currentNum}/${total}`;
+      scoreText.textContent = `${score}`;
+      modeText.textContent = mode;
+      const pct = Math.round((currentNum / total) * 100);
+      progressBar.style.width = `${pct}%`;
+    }
 
-    // Spelling UI refs
-    const spellingArea = document.getElementById("spelling-area");
-    const spellingPrompt = document.getElementById("spelling-prompt");
-    const builtBox = document.getElementById("built-box");
-    const tileRow = document.getElementById("tile-row");
-    const clearBuiltBtn = document.getElementById("clear-built");
-    const checkSpellingBtn = document.getElementById("check-spelling");
-    const tryAgainBtn = document.getElementById("try-again");
-    const spellingHint = document.getElementById("spelling-hint");
-    const vocabPanel = document.getElementById("vocab-panel");
+    function getTotalCount(){
+      // Main questions + review questions will still show progress over original 25
+      return QUESTIONS.length;
+    }
+
+    function getDisplayedNumber(){
+      if(mode === "Main") return idx + 1;
+      // In review, keep progress showing the original question number being reviewed
+      const qIndex = wrongIdxs[reviewPos] ?? (QUESTIONS.length - 1);
+      return qIndex + 1;
+    }
 
     function currentQuestionIndex(){
-      if(mode === "main") return mainIndex;
-      return wrongIndices[reviewPos];
-    }
-
-    function updateRightPanel(){
-      const total = questions.length;
-      const pos = (mode === "main") ? (mainIndex+1) : (reviewPos+1);
-      chipProgressEl.textContent = `${pos}/${(mode==="main") ? total : wrongIndices.length}`;
-      chipScoreEl.textContent = score;
-      chipModeEl.textContent = (mode === "main") ? "Main" : "Review";
-
-      const q = questions[currentQuestionIndex()];
-      kpiTaskEl.textContent = q.section.includes("Reading") ? "Reading" : "Vocabulary";
-      const denom = (mode === "main") ? total : wrongIndices.length;
-      kpiCtEl.textContent = `${score} / ${total}`;
-      const pct = (mode === "main") ? Math.round((mainIndex)/total * 100) : Math.round((reviewPos)/Math.max(1,wrongIndices.length) * 100);
-      progressBarEl.style.width = `${pct}%`;
-    }
-
-    function setFeedback(type, msg){
-      feedbackEl.classList.remove("good","bad");
-      if(type === "good") feedbackEl.classList.add("good");
-      if(type === "bad") feedbackEl.classList.add("bad");
-      feedbackMsgEl.innerHTML = msg;
-    }
-
-    function lockNext(){
-      allowNext = false;
-      nextBtn.disabled = true;
-    }
-    function unlockNext(){
-      allowNext = true;
-      nextBtn.disabled = false;
-    }
-
-    function shuffleArray(arr){
-      const a = arr.slice();
-      for(let i=a.length-1;i>0;i--){
-        const j = Math.floor(Math.random()*(i+1));
-        [a[i],a[j]] = [a[j],a[i]];
-      }
-      return a;
-    }
-
-    function getContextHint(q, attempts){
-      // NOT first-letter clues. Focus on meaning, word type, collocation, and story logic.
-      const base = [
-        "Use the sentence: what is happening (action)? who is involved (person)? where (place)?",
-        "Check the word type: is it a person/job, an object, a place, or an action verb?",
-        "Look for strong collocations from the story (e.g., volcanic ash / sedimentary rock / dig to uncover).",
-        "Re-read and underline the key idea. Which option matches that meaning best?",
-        "If it is a verb, ask: what did they DO? If it is a noun, ask: what THING is it?"
-      ];
-      let extra = q.clue ? `<br><b>Clue:</b> ${q.clue}` : "";
-      if(attempts >= 2){
-        return base[2] + extra;
-      }
-      return base[Math.floor(Math.random()*base.length)] + extra;
+      return (mode === "Main") ? idx : wrongIdxs[reviewPos];
     }
 
     function showQuestion(){
-      const idx = currentQuestionIndex();
-      const q = questions[idx];
-
-      // Reset UI
-      optionsEl.innerHTML = "";
-      optionsEl.style.display = "";
-      spellingArea.style.display = "none";
-      spellingHint.style.display = "none";
-      tryAgainBtn.style.display = "none";
-      builtBox.textContent = "";
-      tileRow.innerHTML = "";
-      feedbackEl.classList.remove("good","bad");
-
-      lockNext();
-      setFeedback("", "Click an answer. If wrong, read the clue and try again. Click Next only when you understand.");
-
-      sectionTagEl.textContent = q.section;
-      qTextEl.textContent = q.question || "";
-
-      // Hide vocab panel ONLY during spelling
-      if(q.type === "spell"){
-        vocabPanel.style.display = "none";
-        optionsEl.style.display = "none";
-        renderSpelling(q);
-      } else {
-        vocabPanel.style.display = "";
-        renderMC(q);
-      }
-
-      updateRightPanel();
-    }
-
-    function renderMC(q){
-      q.options.forEach((opt, i) => {
-        const btn = document.createElement("button");
-        btn.className = "opt-btn";
-        btn.type = "button";
-        btn.textContent = opt;
-        btn.addEventListener("click", () => handleMCAnswer(i));
-        optionsEl.appendChild(btn);
-      });
-    }
-
-    function disableMC(){
-      const btns = optionsEl.querySelectorAll("button");
-      btns.forEach(b => b.disabled = true);
-    }
-
-    function handleMCAnswer(selected){
-      const idx = currentQuestionIndex();
-      const q = questions[idx];
-
-      // Enforce try again (do not let them skip after wrong)
-      if(selected === q.answer){
-        disableMC();
-        // Only score in main mode first pass
-        if(mode === "main") score++;
-        setFeedback("good", "Correct. Click Next when you are ready.");
-        unlockNext();
-      } else {
-        // Keep options enabled so they can try again; no Next.
-        if(mode === "main" && !wrongIndices.includes(idx)){
-          wrongIndices.push(idx);
-        }
-        setFeedback("bad", `Try again.<br>${getContextHint(q, 1)}`);
-        lockNext();
-      }
-
-      updateRightPanel();
-    }
-
-    // ===== Spelling (click tiles) =====
-    function renderSpelling(q){
-      spellingState.q = q;
-      spellingState.answer = (q.word || "").toLowerCase().trim().replace(/\s+/g,"");
-      spellingState.built = "";
-      spellingState.attempts = 0;
-
-      const letters = spellingState.answer.split("");
-      spellingState.tiles = shuffleArray(letters);
-      spellingState.used = new Array(spellingState.tiles.length).fill(false);
-
-      spellingArea.style.display = "block";
-      spellingPrompt.textContent = q.prompt || "Unscramble the word.";
-
-      drawTiles();
-
-      spellingHint.style.display = "none";
-      tryAgainBtn.style.display = "none";
-
-      // Feedback area stays; Next locked until correct
-      lockNext();
-      setFeedback("", "Spelling: click the letter tiles to build the word. Click Check when finished.");
-    }
-
-    function drawTiles(){
-      tileRow.innerHTML = "";
-      spellingState.tiles.forEach((ch, idx) => {
-        const b = document.createElement("button");
-        b.className = "tile-btn";
-        b.type = "button";
-        b.textContent = ch.toUpperCase();
-        b.disabled = spellingState.used[idx];
-        b.addEventListener("click", () => {
-          spellingState.used[idx] = true;
-          spellingState.built += ch;
-          builtBox.textContent = spellingState.built.toUpperCase();
-          drawTiles();
-        });
-        tileRow.appendChild(b);
-      });
-    }
-
-    function spellingHintText(attempts){
-      const q = spellingState.q;
-      const base = [
-        "Use the meaning: is it an action, a place, or a science/job word?",
-        "Try building in chunks (beginning + middle + ending), not letter by letter.",
-        "Say the word slowly. Do you hear parts you can group together?",
-        "For long words: build the ending first, then fill the middle."
-      ];
-      const extra = q.clue ? ` Extra clue: ${q.clue}` : "";
-      if(attempts >= 2){
-        return `Hint: the word has ${spellingState.answer.length} letters. Try the ending first.${extra}`;
-      }
-      return base[Math.floor(Math.random()*base.length)] + extra;
-    }
-
-    clearBuiltBtn.addEventListener("click", () => {
-      spellingState.built = "";
-      spellingState.used = spellingState.used.map(()=>false);
-      builtBox.textContent = "";
-      spellingHint.style.display = "none";
-      tryAgainBtn.style.display = "none";
-      drawTiles();
-    });
-
-    checkSpellingBtn.addEventListener("click", () => {
-      const attempt = (spellingState.built || "").toLowerCase().trim();
-      const answer = spellingState.answer;
-
-      if(attempt.length !== answer.length){
-        spellingHint.style.display = "block";
-        spellingHint.textContent = "Use all the letter tiles before you check.";
-        return;
-      }
-
-      if(attempt === answer){
-        // Correct
-        if(mode === "main") score++;
-        setFeedback("good", "Correct spelling. Click Next when you are ready.");
-        spellingHint.style.display = "none";
-        tryAgainBtn.style.display = "none";
-        unlockNext();
-        updateRightPanel();
-      } else {
-        // Wrong → try again + meaning-based hint
-        const idx = currentQuestionIndex();
-        if(mode === "main" && !wrongIndices.includes(idx)){
-          wrongIndices.push(idx);
-        }
-
-        spellingState.attempts++;
-        spellingHint.style.display = "block";
-        spellingHint.textContent = "Try again. " + spellingHintText(spellingState.attempts);
-
-        tryAgainBtn.style.display = "inline-block";
-        lockNext();
-        updateRightPanel();
-      }
-    });
-
-    tryAgainBtn.addEventListener("click", () => {
-      // Easier retry: clear and reshuffle
-      spellingState.built = "";
-      spellingState.used = spellingState.used.map(()=>false);
-      spellingState.tiles = shuffleArray(spellingState.tiles);
-      builtBox.textContent = "";
-      drawTiles();
-    });
-
-    // ===== Next logic (main → review) =====
-    nextBtn.addEventListener("click", () => {
-      if(!allowNext) return;
-
-      if(mode === "main"){
-        mainIndex++;
-        if(mainIndex < questions.length){
-          showQuestion();
-        } else {
-          startReviewOrFinish();
-        }
-      } else {
-        reviewPos++;
-        if(reviewPos < wrongIndices.length){
-          showQuestion();
-        } else {
-          finish();
-        }
-      }
-    });
-
-    function startReviewOrFinish(){
-      if(wrongIndices.length > 0){
-        mode = "review";
-        reviewPos = 0;
-        // In review we do NOT change score (you already earned score only in main),
-        // but we still require correct to proceed.
-        setFeedback("", "Review mode: redo the questions you missed. Click Next only after you get it correct.");
-        showQuestion();
-      } else {
-        finish();
-      }
-    }
-
-    function finish(){
-      // Show a simple results screen in the left card
-      vocabPanel.style.display = "";
-
-      sectionTagEl.textContent = "All Done";
-      qTextEl.textContent = "You have finished the practice.";
-
-      optionsEl.innerHTML = "";
-      spellingArea.style.display = "none";
-      unlockNext();
+      const q = QUESTIONS[currentQuestionIndex()];
       nextBtn.disabled = true;
 
-      // List words to review (unique)
-      const wrongWords = wrongIndices.map(i => questions[i].word).filter(Boolean);
-      const unique = [...new Set(wrongWords)];
-
-      if(unique.length){
-        setFeedback("bad",
-          `Finished.<br><b>Final score:</b> ${score} / ${questions.length}<br><br>` +
-          `<b>Review these words:</b><br>• ${unique.join("<br>• ")}`
-        );
-      } else {
-        setFeedback("good", `Finished.<br><b>Final score:</b> ${score} / ${questions.length}<br><br>Excellent accuracy.`);
+      // section tag + micro instruction
+      sectionTag.innerHTML = `<b>${q.section}</b> <span id="sectionMini">• ${q.section.includes("Spelling") ? "click letters to spell" : "choose the best answer"}</span>`;
+      // re-bind sectionMini ref (because innerHTML replaced it)
+      // (not strictly necessary, but keeps things consistent)
+      // eslint-disable-next-line
+      const mini = document.getElementById("sectionMini");
+      if(mini){
+        if(q.section === "Vocabulary – Meaning") mini.textContent = "• meaning";
+        if(q.section === "Vocabulary – Use") mini.textContent = "• best word for the sentence";
+        if(q.section === "Vocabulary – Spelling") mini.textContent = "• click letters (no typing)";
+        if(q.section === "Reading Comprehension") mini.textContent = "• use evidence from the excerpt";
       }
 
-      chipModeEl.textContent = "Done";
-      chipProgressEl.textContent = `${questions.length}/${questions.length}`;
-      progressBarEl.style.width = "100%";
-      kpiCtEl.textContent = `${score} / ${questions.length}`;
+      qTitle.textContent = `Question`;
+      qSub.textContent = (mode === "Main")
+        ? "Work carefully. If you are wrong, you will get a clue and can try again."
+        : "Review Mode: this is a question you missed. Try again.";
+
+      // Hide/Show vocab box during spelling
+      if(q.type === "spell"){
+        vocabBox.classList.add("hide"); // hide vocab list during spelling
+      } else {
+        vocabBox.classList.remove("hide");
+      }
+
+      // Reset feedback
+      setFeedback("Choose an answer. If you are wrong, you will get a helpful clue and you can try again.", "", "");
+
+      // Render prompt + excerpt if present
+      let promptText = q.prompt;
+      if(q.excerpt){
+        promptText += `\n\nExcerpt:\n`;
+      }
+      promptEl.textContent = promptText;
+
+      // If excerpt exists, show excerpt box inside prompt area
+      const existingExcerpt = document.getElementById("excerptBox");
+      if(existingExcerpt) existingExcerpt.remove();
+      if(q.excerpt){
+        const ex = document.createElement("div");
+        ex.id = "excerptBox";
+        ex.className = "excerpt";
+        ex.textContent = q.excerpt;
+        promptEl.insertAdjacentElement("afterend", ex);
+      }
+
+      // Reset option/spell areas
+      optionsEl.innerHTML = "";
+      spellWrap.classList.add("hide");
+      tryAgainBtn.classList.add("hide");
+
+      // Render based on type
+      if(q.type === "mc"){
+        renderMultipleChoice(q);
+      }else if(q.type === "spell"){
+        renderSpelling(q);
+      }
+
+      updateHeader();
     }
 
-    // Restart
-    restartBtn.addEventListener("click", () => {
-      mainIndex = 0;
-      score = 0;
-      mode = "main";
-      wrongIndices = [];
-      reviewPos = 0;
-      allowNext = false;
+    function renderMultipleChoice(q){
+      // Ensure excerpt is positioned nicely when no excerpt
+      const ex = document.getElementById("excerptBox");
+      if(ex && q.type === "mc"){
+        // keep as-is
+      }
 
-      // Restore panel (in case hidden)
-      vocabPanel.style.display = "";
+      qTitle.textContent = `${q.section}`;
+
+      // Build option buttons
+      q.options.forEach((opt, i) => {
+        const b = document.createElement("button");
+        b.className = "btn";
+        b.textContent = opt;
+        b.addEventListener("click", () => handleMCAnswer(i));
+        optionsEl.appendChild(b);
+      });
+    }
+
+    function handleMCAnswer(choice){
+      const q = QUESTIONS[currentQuestionIndex()];
+      const buttons = Array.from(optionsEl.querySelectorAll("button.btn"));
+
+      // If correct -> lock, enable next
+      if(choice === q.answer){
+        buttons.forEach(btn => btn.disabled = true);
+        setFeedback("Correct. 🙂", "Click Next when you understand why.", "good");
+        nextBtn.disabled = false;
+
+        // score only in Main mode, first time
+        if(mode === "Main") score++;
+
+      }else{
+        // Wrong -> show context-based clue, allow retry (do not lock)
+        setFeedback("Not yet. Try again.", `Clue: ${q.hint}`, "warn");
+      }
+    }
+
+    /***********************
+     * Spelling (click tiles)
+     ***********************/
+    function patternClue(word, clueStart){
+      // word can contain spaces; we keep spaces visible
+      // reveal first N letters of each word segment, underscores for the rest
+      const parts = word.split(" ");
+      const out = parts.map(p => {
+        const n = Math.min(clueStart, p.length);
+        const head = p.slice(0, n);
+        const tail = "_".repeat(Math.max(0, p.length - n));
+        return head + tail;
+      });
+      return out.join(" ");
+    }
+
+    function makeTiles(word){
+      // Include space tiles if word has spaces
+      const chars = word.split("");
+      // Shuffle
+      for(let i = chars.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [chars[i], chars[j]] = [chars[j], chars[i]];
+      }
+      return chars;
+    }
+
+    function renderSpelling(q){
+      qTitle.textContent = `${q.section}`;
+
+      // hide MC options, show spell
+      optionsEl.innerHTML = "";
+      spellWrap.classList.remove("hide");
+
+      built = "";
+      spellBuilt.textContent = "—";
+
+      const clueStart = q.clueStart ?? 2;
+      spellPattern.textContent = `Pattern clue: ${patternClue(q.word, clueStart)}`;
+
+      // Create tiles
+      tilePool = makeTiles(q.word);
+      tileUsed = new Array(tilePool.length).fill(false);
+      tilesEl.innerHTML = "";
+
+      tilePool.forEach((ch, i) => {
+        const t = document.createElement("button");
+        t.className = "tile";
+        t.textContent = (ch === " ") ? "␠" : ch;
+        t.title = (ch === " ") ? "space" : ch;
+        t.addEventListener("click", () => {
+          if(tileUsed[i]) return;
+          tileUsed[i] = true;
+          t.disabled = true;
+          built += ch;
+          spellBuilt.textContent = built || "—";
+          // When length matches, check
+          if(built.length === q.word.length){
+            checkSpelling(q);
+          }
+        });
+        tilesEl.appendChild(t);
+      });
+
+      backspaceBtn.onclick = () => {
+        if(!built.length) return;
+        // remove last char, re-enable a matching tile that was disabled most recently
+        const removed = built[built.length - 1];
+        built = built.slice(0, -1);
+        spellBuilt.textContent = built || "—";
+
+        // find last used tile matching removed, re-enable it
+        const tiles = Array.from(tilesEl.querySelectorAll("button.tile"));
+        for(let i = tileUsed.length - 1; i >= 0; i--){
+          if(tileUsed[i] && tilePool[i] === removed){
+            tileUsed[i] = false;
+            tiles[i].disabled = false;
+            break;
+          }
+        }
+        nextBtn.disabled = true;
+        tryAgainBtn.classList.add("hide");
+        setFeedback("Keep building the word.", "Tip: use the pattern clue and check letter order.", "");
+      };
+
+      clearBtn.onclick = () => resetSpelling(q, false);
+
+      tryAgainBtn.onclick = () => resetSpelling(q, true);
+
+      setFeedback("Spelling: click the letters to build the word.", "If you are wrong, you will get a pattern clue and a Try again button.", "");
+    }
+
+    function resetSpelling(q, keepClue){
+      built = "";
+      spellBuilt.textContent = "—";
+      nextBtn.disabled = true;
+
+      const tiles = Array.from(tilesEl.querySelectorAll("button.tile"));
+      tileUsed = tileUsed.map(() => false);
+      tiles.forEach(t => t.disabled = false);
+
+      tryAgainBtn.classList.add("hide");
+      const clueStart = q.clueStart ?? 2;
+      spellPattern.textContent = `Pattern clue: ${patternClue(q.word, clueStart)}`;
+
+      setFeedback(
+        "Try again.",
+        keepClue
+          ? "Use the pattern clue. Notice the beginning letters and the word shape."
+          : "Click letters carefully. Use Backspace if you need to fix one letter.",
+        "warn"
+      );
+    }
+
+    function checkSpelling(q){
+      if(built === q.word){
+        setFeedback("Correct spelling. 🙂", "Click Next when you are ready.", "good");
+        nextBtn.disabled = false;
+        if(mode === "Main") score++;
+        tryAgainBtn.classList.add("hide");
+      }else{
+        // wrong — keep tiles locked to show what they built, but allow Try Again
+        setFeedback("Not correct yet.", "Click Try again and use the pattern clue (some letters are already shown).", "warn");
+        tryAgainBtn.classList.remove("hide");
+        nextBtn.disabled = true;
+      }
+    }
+
+    /***********************
+     * Navigation + Review
+     ***********************/
+    nextBtn.addEventListener("click", () => {
+      // If in review, move through wrong list
+      if(mode === "Review"){
+        reviewPos++;
+        if(reviewPos < wrongIdxs.length){
+          showQuestion();
+          return;
+        }else{
+          endScreen();
+          return;
+        }
+      }
+
+      // In main mode, record wrong if they never got it correct
+      // We only allow Next after correct, so "wrong recording" happens when they reach end
+      idx++;
+
+      if(idx < QUESTIONS.length){
+        showQuestion();
+      }else{
+        startReviewIfNeeded();
+      }
+    });
+
+    function startReviewIfNeeded(){
+      // Build wrong list:
+      // Since "Next" is only enabled when correct, wrongIdxs will usually be empty.
+      // But we still keep review mode in case you later decide to allow skipping.
+      // For now, we populate wrongIdxs from "missed at least once" by tracking below.
+      if(wrongIdxs.length > 0){
+        mode = "Review";
+        reviewPos = 0;
+        setFeedback("Review Mode", "You will retry the questions you missed.", "warn");
+        showQuestion();
+      }else{
+        endScreen();
+      }
+    }
+
+    function endScreen(){
+      // Clean excerpt if present
+      const existingExcerpt = document.getElementById("excerptBox");
+      if(existingExcerpt) existingExcerpt.remove();
+
+      sectionTag.innerHTML = `<b>Finished</b> <span>• well done</span>`;
+      qTitle.textContent = "All done!";
+      qSub.textContent = "You have finished the practice.";
+      promptEl.textContent = `Final score: ${score} / ${QUESTIONS.length}\n\nReview suggestion:\nIf you missed any words while practicing, re-read the story excerpt and re-check those words in context.`;
+
+      optionsEl.innerHTML = "";
+      spellWrap.classList.add("hide");
+      vocabBox.classList.remove("hide");
+      nextBtn.disabled = true;
+
+      setFeedback("Great work.", "If you want to practice again, use Restart (teacher).", "good");
+
+      // Update header to show complete
+      progressText.textContent = `${QUESTIONS.length}/${QUESTIONS.length}`;
+      progressBar.style.width = `100%`;
+      modeText.textContent = "Done";
+    }
+
+    // Track “missed at least once” to support optional review later
+    // (We attach a global capture for MC; for spelling we add when they fail.)
+    // For MC: when wrong answer chosen, record it once.
+    const _origHandleMCAnswer = handleMCAnswer;
+    handleMCAnswer = function(choice){
+      const qIdx = currentQuestionIndex();
+      const q = QUESTIONS[qIdx];
+
+      if(choice !== q.answer){
+        if(!wrongIdxs.includes(qIdx) && mode === "Main"){
+          wrongIdxs.push(qIdx);
+        }
+      }else{
+        // If they eventually get it correct, we can remove from wrong list
+        // so review is only “still weak” items (optional)
+        if(mode === "Main"){
+          wrongIdxs = wrongIdxs.filter(x => x !== qIdx);
+        }
+      }
+      _origHandleMCAnswer(choice);
+    };
+
+    // For spelling: mark wrong on check
+    const _origCheckSpelling = checkSpelling;
+    checkSpelling = function(q){
+      const qIdx = currentQuestionIndex();
+      if(built !== q.word){
+        if(mode === "Main" && !wrongIdxs.includes(qIdx)){
+          wrongIdxs.push(qIdx);
+        }
+      }else{
+        if(mode === "Main"){
+          wrongIdxs = wrongIdxs.filter(x => x !== qIdx);
+        }
+      }
+      _origCheckSpelling(q);
+    };
+
+    restartBtn.addEventListener("click", () => {
+      const ok = confirm("Restart the whole practice? (Students should not click this.)");
+      if(!ok) return;
+
+      score = 0;
+      idx = 0;
+      mode = "Main";
+      wrongIdxs = [];
+      reviewPos = 0;
+
+      // Remove excerpt if it exists
+      const existingExcerpt = document.getElementById("excerptBox");
+      if(existingExcerpt) existingExcerpt.remove();
 
       showQuestion();
     });
 
-    // Init
-    // Update chip total label with real length
-    chipProgressEl.textContent = `1/${questions.length}`;
-    kpiCtEl.textContent = `0 / ${questions.length}`;
+    // Initial render
     showQuestion();
   </script>
 </body>
