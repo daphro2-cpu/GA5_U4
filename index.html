@@ -9,18 +9,14 @@
       --bg1:#07101f;
       --bg2:#0b1b33;
       --panel:rgba(255,255,255,0.06);
-      --panel2:rgba(255,255,255,0.08);
       --stroke:rgba(255,255,255,0.10);
       --text:rgba(255,255,255,0.92);
       --muted:rgba(255,255,255,0.72);
-      --muted2:rgba(255,255,255,0.55);
       --good:#28c76f;
       --bad:#ff4d4f;
       --accent:#77a7ff;
-      --gold:#ffcc66;
       --shadow: 0 18px 60px rgba(0,0,0,0.45);
       --radius:26px;
-      --radius2:18px;
       --font: "Century Gothic", "Trebuchet MS", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
 
@@ -116,7 +112,6 @@
       width:340px;
       height:340px;
       background: radial-gradient(circle at 30% 30%, rgba(119,167,255,0.30), transparent 60%);
-      filter: blur(0px);
       opacity:0.9;
       transform: rotate(10deg);
       pointer-events:none;
@@ -171,6 +166,7 @@
       gap:10px;
       flex-wrap:wrap;
       justify-content:flex-end;
+      min-width: 260px;
     }
     .badge{
       padding:10px 14px;
@@ -182,11 +178,45 @@
       display:flex;
       align-items:center;
       gap:8px;
+      white-space: nowrap;
     }
     .badge strong{ color:var(--text); font-weight:700; }
     .badge .dot{
       width:8px; height:8px; border-radius:999px;
       background: rgba(255,255,255,0.35);
+    }
+
+    /* Progress bar badge */
+    .pbBadge{
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .pbText{
+      font-size: 13px;
+      color: rgba(255,255,255,0.80);
+      min-width: 92px;
+      white-space: nowrap;
+    }
+    .pbTrack{
+      flex: 1 1 auto;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.10);
+      overflow:hidden;
+    }
+    .pbFill{
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, rgba(119,167,255,0.55), rgba(119,167,255,0.25));
+      border-right: 1px solid rgba(255,255,255,0.18);
+      transition: width 180ms ease;
     }
 
     .layout{
@@ -204,9 +234,7 @@
       overflow:hidden;
     }
 
-    .cardInner{
-      padding:22px;
-    }
+    .cardInner{ padding:22px; }
 
     .pill{
       display:inline-flex;
@@ -317,10 +345,6 @@
       border:1px solid rgba(119,167,255,0.38);
     }
     .btn.primary:hover{ background: linear-gradient(180deg, rgba(119,167,255,0.36), rgba(119,167,255,0.22)); }
-    .btn.danger{
-      background: rgba(255,77,79,0.12);
-      border:1px solid rgba(255,77,79,0.30);
-    }
 
     .smallLink{
       background:none;
@@ -370,7 +394,6 @@
       font-size:13px;
       color:rgba(255,255,255,0.80);
       letter-spacing:0.2px;
-      text-transform:none;
     }
     .sideBlock ul{
       margin:0;
@@ -462,7 +485,6 @@
       font-size:14px;
       line-height:1.55;
     }
-    .excerpt em{ color: rgba(255,255,255,0.92); font-style:normal; font-weight:700; }
 
     .endBox{
       padding:18px;
@@ -479,15 +501,16 @@
     /* Phone layout */
     @media (max-width: 980px){
       .layout{ grid-template-columns: 1fr; }
-      .badges{ justify-content:flex-start; }
+      .badges{ justify-content:flex-start; min-width: unset; width: 100%; }
       .title{ font-size:28px; }
+      .pbBadge{ width: 100%; }
     }
     @media (max-width: 720px){
       body{ padding:12px; }
-      .header{ padding:14px; border-radius:22px; }
+      .header{ padding:14px; border-radius:22px; flex-direction: column; align-items:flex-start; }
       .logoWrap{ width:48px; height:48px; border-radius:14px; }
       .title{ font-size:24px; }
-      .subtitle{ font-size:13px; }
+      .subtitle{ font-size:13px; white-space: normal; }
       .cardInner{ padding:16px; }
       .qTitle{ font-size:26px; }
       .options{ grid-template-columns: 1fr; }
@@ -535,9 +558,15 @@
       </div>
 
       <div class="badges">
-        <div class="badge"><span class="dot"></span> Progress: <strong id="progressText">1/25</strong></div>
         <div class="badge"><span class="dot"></span> Correct: <strong id="scoreText">0</strong></div>
-        <div class="badge"><span class="dot"></span> Smiley faces: <strong id="smileyText">0</strong></div>
+
+        <div class="pbBadge" aria-label="Progress bar">
+          <div class="pbText"><strong id="progressText">1/25</strong></div>
+          <div class="pbTrack" role="progressbar" aria-valuemin="0" aria-valuemax="25" aria-valuenow="1">
+            <div class="pbFill" id="pbFill"></div>
+          </div>
+        </div>
+
         <div class="badge"><span class="dot"></span> Mode: <strong id="modeText">Main</strong></div>
       </div>
     </div>
@@ -622,7 +651,6 @@
             <ul>
               <li>Click an answer.</li>
               <li>If wrong: read the hint and try again.</li>
-              <li>Smiley faces: <strong>3</strong> (1st try), <strong>2</strong> (2nd), <strong>1</strong> (3rd+).</li>
               <li>Click <strong>Next</strong> only when you understand.</li>
             </ul>
           </div>
@@ -648,7 +676,7 @@
           <div class="sideBlock">
             <h4>Teacher note</h4>
             <ul>
-              <li>Reset is moved to a teacher link to prevent accidental clicks.</li>
+              <li>Reset is a teacher link to prevent accidental clicks.</li>
               <li>At the end, students review any questions they missed.</li>
             </ul>
           </div>
@@ -674,176 +702,134 @@ const VOCAB = [
 
 // 10 Meaning
 const meaningQuestions = [
-  {
-    type:"mcq", section:"Vocabulary – Meaning", word:"paleontologist",
+  { type:"mcq", section:"Vocabulary – Meaning",
     prompt:"Which word means:\nA scientist who studies fossils and ancient life on Earth?",
-    options:["paleontologist","pastime","skull","layers"],
-    answer:0,
+    options:["paleontologist","pastime","skull","layers"], answer:0,
     hint:"This person studies fossils, bones, and life from long ago."
   },
-  {
-    type:"mcq", section:"Vocabulary – Meaning", word:"ravine",
+  { type:"mcq", section:"Vocabulary – Meaning",
     prompt:"Which word means:\nA deep, narrow valley or gap in the ground?",
-    options:["ravine","layers","ash","favorite"],
-    answer:0,
+    options:["ravine","layers","ash","favorite"], answer:0,
     hint:"It’s a landform—often steep and difficult to climb out of."
   },
-  {
-    type:"mcq", section:"Vocabulary – Meaning", word:"sedimentary rock",
+  { type:"mcq", section:"Vocabulary – Meaning",
     prompt:"Which phrase means:\nRock formed over time from small pieces pressed into layers?",
-    options:["sedimentary rock","ash","skull","pastime"],
-    answer:0,
+    options:["sedimentary rock","ash","skull","pastime"], answer:0,
     hint:"This kind of rock often forms in layers (like a stack)."
   },
-  {
-    type:"mcq", section:"Vocabulary – Meaning", word:"excavate",
+  { type:"mcq", section:"Vocabulary – Meaning",
     prompt:"Which word means:\nTo dig carefully to uncover something buried?",
-    options:["excavate","discover","dream","examine"],
-    answer:0,
-    hint:"Archaeologists and paleontologists do this to uncover buried objects."
+    options:["excavate","discover","dream","examine"], answer:0,
+    hint:"Scientists do this to uncover bones or objects underground."
   },
-  {
-    type:"mcq", section:"Vocabulary – Meaning", word:"examine",
+  { type:"mcq", section:"Vocabulary – Meaning",
     prompt:"Which word means:\nTo look at something closely and carefully to learn about it?",
-    options:["examine","tripped","favorite","layers"],
-    answer:0,
+    options:["examine","tripped","favorite","layers"], answer:0,
     hint:"You do this when you want details and evidence."
   },
-  {
-    type:"mcq", section:"Vocabulary – Meaning", word:"layers",
+  { type:"mcq", section:"Vocabulary – Meaning",
     prompt:"Which word means:\nLevels stacked on top of each other, like sheets or parts of a cake?",
-    options:["layers","skull","ash","dream"],
-    answer:0,
+    options:["layers","skull","ash","dream"], answer:0,
     hint:"Think: one level on top of another."
   },
-  {
-    type:"mcq", section:"Vocabulary – Meaning", word:"determine",
+  { type:"mcq", section:"Vocabulary – Meaning",
     prompt:"Which word means:\nTo find out the answer by checking facts or evidence?",
-    options:["determine","discover","favorite","pastime"],
-    answer:0,
-    hint:"Scientists do this using tests, records, or clues."
+    options:["determine","discover","favorite","pastime"], answer:0,
+    hint:"Scientists do this using tests and clues."
   },
-  {
-    type:"mcq", section:"Vocabulary – Meaning", word:"tripped",
+  { type:"mcq", section:"Vocabulary – Meaning",
     prompt:"Which word means:\nYour foot caught on something and you almost fell (or fell)?",
-    options:["tripped","dream","discover","skull"],
-    answer:0,
+    options:["tripped","dream","discover","skull"], answer:0,
     hint:"It’s a movement accident when walking or running."
   },
-  {
-    type:"mcq", section:"Vocabulary – Meaning", word:"pastime",
+  { type:"mcq", section:"Vocabulary – Meaning",
     prompt:"Which word means:\nAn activity you do for fun in your free time?",
-    options:["pastime","layers","ash","examine"],
-    answer:0,
+    options:["pastime","layers","ash","examine"], answer:0,
     hint:"It’s not work—it's a hobby or fun activity."
   },
-  {
-    type:"mcq", section:"Vocabulary – Meaning", word:"skull",
+  { type:"mcq", section:"Vocabulary – Meaning",
     prompt:"Which word means:\nThe hard bone that protects the brain in your head?",
-    options:["skull","ash","ravine","favorite"],
-    answer:0,
+    options:["skull","ash","ravine","favorite"], answer:0,
     hint:"It’s part of the skeleton—your head bone."
   }
 ];
 
-// 8 Use (correct tense & context)
+// 8 Use
 const useQuestions = [
-  {
-    type:"mcq", section:"Vocabulary – Use", word:"discovered",
+  { type:"mcq", section:"Vocabulary – Use",
     prompt:"Choose the best word:\nIn 2003, paleontologists __________ the bones in a field near the village.",
-    options:["discovered","layers","pastime","dream"],
-    answer:0,
+    options:["discovered","layers","pastime","dream"], answer:0,
     hint:"This verb means they found something that was already there."
   },
-  {
-    type:"mcq", section:"Vocabulary – Use", word:"tripped",
+  { type:"mcq", section:"Vocabulary – Use",
     prompt:"Choose the best word:\nJavier ran down into the ravine and __________ on something on the ground.",
-    options:["tripped","determined","excavated","examined"],
-    answer:0,
+    options:["tripped","determined","excavated","examined"], answer:0,
     hint:"What happens when your foot catches and you lose balance?"
   },
-  {
-    type:"mcq", section:"Vocabulary – Use", word:"examined",
+  { type:"mcq", section:"Vocabulary – Use",
     prompt:"Choose the best word:\nThe paleontologist came to the town and __________ the boy’s discovery carefully.",
-    options:["examined","dreamed","layered","favored"],
-    answer:0,
+    options:["examined","dreamed","layered","favored"], answer:0,
     hint:"This means she looked closely to learn details."
   },
-  {
-    type:"mcq", section:"Vocabulary – Use", word:"layers",
+  { type:"mcq", section:"Vocabulary – Use",
     prompt:"Choose the best word:\nSedimentary rock lies in __________ under the ground.",
-    options:["layers","ash","skulls","pastimes"],
-    answer:0,
+    options:["layers","ash","skulls","pastimes"], answer:0,
     hint:"This refers to levels stacked one on top of another."
   },
-  {
-    type:"mcq", section:"Vocabulary – Use", word:"ash",
+  { type:"mcq", section:"Vocabulary – Use",
     prompt:"Choose the best word:\nAfter a volcano erupts, you may find volcanic __________ in the air and on the ground.",
-    options:["ash","ravine","favorite","skull"],
-    answer:0,
+    options:["ash","ravine","favorite","skull"], answer:0,
     hint:"It’s fine gray material left after something burns."
   },
-  {
-    type:"mcq", section:"Vocabulary – Use", word:"determine",
+  { type:"mcq", section:"Vocabulary – Use",
     prompt:"Choose the best word:\nScientists can test the rock to __________ how old it is.",
-    options:["determine","discover","trip","pastime"],
-    answer:0,
+    options:["determine","discover","trip","pastime"], answer:0,
     hint:"This means ‘find out’ using evidence."
   },
-  {
-    type:"mcq", section:"Vocabulary – Use", word:"excavating",
+  { type:"mcq", section:"Vocabulary – Use",
     prompt:"Choose the best word:\nSoon, the team began __________ the area around the bone to find more pieces.",
-    options:["excavating","dreaming","layering","favoriting"],
-    answer:0,
+    options:["excavating","dreaming","layering","favoriting"], answer:0,
     hint:"This action means digging carefully to uncover something buried."
   },
-  {
-    type:"mcq", section:"Vocabulary – Use", word:"paleontologist",
+  { type:"mcq", section:"Vocabulary – Use",
     prompt:"Choose the best word:\nA __________ studies fossils to learn about ancient life on Earth.",
-    options:["paleontologist","pastime","ravine","ash"],
-    answer:0,
+    options:["paleontologist","pastime","ravine","ash"], answer:0,
     hint:"This is a scientist, not a place or a thing."
   }
 ];
 
-// 5 Spelling (click letters) — no letter clue shown until they click Clue
+// 5 Spelling (click letters)
 const spellingQuestions = [
-  {
-    type:"spell", section:"Vocabulary – Spelling", word:"paleontologist",
+  { type:"spell", section:"Vocabulary – Spelling", word:"paleontologist",
     prompt:"Spelling:\nA scientist who studies fossils and ancient life on Earth.",
     hint:"Think: a job title for fossil scientists."
   },
-  {
-    type:"spell", section:"Vocabulary – Spelling", word:"sedimentary",
+  { type:"spell", section:"Vocabulary – Spelling", word:"sedimentary",
     prompt:"Spelling:\nA word that describes rock formed in layers over time.",
     hint:"It relates to ‘sediment’ and layers."
   },
-  {
-    type:"spell", section:"Vocabulary – Spelling", word:"excavate",
+  { type:"spell", section:"Vocabulary – Spelling", word:"excavate",
     prompt:"Spelling:\nTo dig carefully to uncover something buried.",
-    hint:"Archaeologists and paleontologists do this at a dig site."
+    hint:"Scientists do this at a dig site."
   },
-  {
-    type:"spell", section:"Vocabulary – Spelling", word:"ravine",
+  { type:"spell", section:"Vocabulary – Spelling", word:"ravine",
     prompt:"Spelling:\nA deep, narrow valley or gap in the ground.",
     hint:"A landform you might climb down into."
   },
-  {
-    type:"spell", section:"Vocabulary – Spelling", word:"determine",
+  { type:"spell", section:"Vocabulary – Spelling", word:"determine",
     prompt:"Spelling:\nTo find out the answer using evidence.",
     hint:"Scientists do this with tests and facts."
   }
 ];
 
-// 2 Reading comprehension (same excerpt source)
+// 2 Reading comprehension (same excerpt)
 const readingExcerpt = [
   '“This bone was buried in sedimentary rock, which lies in layers under the ground.”',
   '“Soon, many paleontologists began excavating the area around the bone.”'
 ];
 
 const readingQuestions = [
-  {
-    type:"mcq", section:"Reading Comprehension", word:"RC1",
+  { type:"mcq", section:"Reading Comprehension",
     excerpt: readingExcerpt.join("\n\n"),
     prompt:"Based on the excerpt, why do ‘layers’ matter for the scientists?",
     options:[
@@ -855,8 +841,7 @@ const readingQuestions = [
     answer:0,
     hint:"Think like a scientist: layers are evidence over time."
   },
-  {
-    type:"mcq", section:"Reading Comprehension", word:"RC2",
+  { type:"mcq", section:"Reading Comprehension",
     excerpt: readingExcerpt.join("\n\n"),
     prompt:"What does the word ‘excavating’ show about how the scientists work?",
     options:[
@@ -870,51 +855,36 @@ const readingQuestions = [
   }
 ];
 
-const QUESTIONS = [
-  ...meaningQuestions,
-  ...useQuestions,
-  ...spellingQuestions,
-  ...readingQuestions
-];
-
-// Safety check: must be exactly 25
-if (QUESTIONS.length !== 25) {
-  console.warn("Question count is not 25:", QUESTIONS.length);
-}
+const QUESTIONS = [...meaningQuestions, ...useQuestions, ...spellingQuestions, ...readingQuestions];
 
 /* ---------------------------
    STATE
 ---------------------------- */
-let order = [...Array(QUESTIONS.length).keys()]; // fixed order: meaning -> use -> spelling -> reading
+let order = [...Array(QUESTIONS.length).keys()];
 let idx = 0;
 
-let correctCount = 0;             // number of questions eventually correct (main mode)
-let smileyCount = 0;              // total smileys earned
-let mode = "Main";                // Main or Review
-let missed = [];                  // indexes of questions missed in Main
-let attempts = 0;                 // attempts on current question
+let correctCount = 0;
+let mode = "Main";
+let missed = [];
+let attempts = 0;
 let answeredCorrect = false;
-
-let hintShown = false;
 
 // Spelling state
 let spellTarget = "";
 let spellBuild = [];
 let letterBank = [];
-let revealed = [];                // boolean array for revealed letters (clue)
-let spellChecked = false;         // whether user pressed Check on spelling
-let spellingLocked = false;       // lock while feedback shows
+let revealed = [];
 
 /* ---------------------------
    ELEMENTS
 ---------------------------- */
 const progressText = document.getElementById("progressText");
+const pbFill = document.getElementById("pbFill");
+const pbTrack = document.querySelector(".pbTrack[role='progressbar']");
 const scoreText = document.getElementById("scoreText");
-const smileyText = document.getElementById("smileyText");
 const modeText = document.getElementById("modeText");
 
 const sectionPill = document.getElementById("sectionPill");
-const sectionSub = document.getElementById("sectionSub");
 const qTitle = document.getElementById("qTitle");
 const qPrompt = document.getElementById("qPrompt");
 const optionsEl = document.getElementById("options");
@@ -930,7 +900,6 @@ const currentTaskTag = document.getElementById("currentTaskTag");
 
 const vocabChips = document.getElementById("vocabChips");
 const vocabHiddenNote = document.getElementById("vocabHiddenNote");
-const vocabBlock = document.getElementById("vocabBlock");
 
 // Spelling elements
 const spellBox = document.getElementById("spellBox");
@@ -962,7 +931,7 @@ const showClueSpellBtn = document.getElementById("showClueSpellBtn");
 })();
 
 /* ---------------------------
-   UI HELPERS
+   HELPERS
 ---------------------------- */
 function shuffle(arr){
   const a = [...arr];
@@ -976,11 +945,14 @@ function shuffle(arr){
 function setHeader(){
   modeText.textContent = mode;
   scoreText.textContent = correctCount;
-  smileyText.textContent = smileyCount;
 
   const total = (mode === "Main") ? QUESTIONS.length : missed.length;
-  const pos = (mode === "Main") ? (idx+1) : (idx+1);
+  const pos = idx + 1;
   progressText.textContent = `${pos}/${total}`;
+
+  const pct = Math.round((pos / total) * 100);
+  pbFill.style.width = `${pct}%`;
+  if(pbTrack) pbTrack.setAttribute("aria-valuenow", String(pos));
 }
 
 function sectionLabel(section){
@@ -989,13 +961,6 @@ function sectionLabel(section){
   if(section.includes("Spelling")) return "Vocabulary";
   if(section.includes("Reading")) return "Reading";
   return "Practice";
-}
-
-function smileysForAttempt(attemptNum){
-  // attemptNum is 1-based: 1st try => 3, 2nd => 2, 3rd+ => 1
-  if(attemptNum <= 1) return 3;
-  if(attemptNum === 2) return 2;
-  return 1;
 }
 
 function disableAllOptions(disabled=true){
@@ -1007,14 +972,21 @@ function clearMCQUI(){
   optionsEl.innerHTML = "";
   feedbackEl.textContent = "";
   feedbackEl.className = "feedback";
-  hintShown = false;
-  hintBox.innerHTML = "<strong>Hint:</strong> Read the whole sentence. Think: what is happening?";
+  hintBox.innerHTML = "<strong>Hint:</strong> Click <strong>Show hint</strong> if you need help using the context.";
   nextBtn.disabled = true;
 }
 
-function showHint(text){
-  hintBox.innerHTML = `<strong>Hint:</strong> ${text}`;
-  hintShown = true;
+function buildContextHint(q){
+  if(q.section.includes("Use")){
+    return "Underline the blank mentally. Do you need an action (verb) or a thing (noun)? Choose the word that fits both meaning and grammar.";
+  }
+  if(q.section.includes("Meaning")){
+    return "Ask: Is the definition a person, place, thing, or action? Eliminate options that don’t match that category.";
+  }
+  if(q.section.includes("Reading")){
+    return "Use evidence from the excerpt. Choose the answer that matches what the text suggests—avoid answers that add new ideas.";
+  }
+  return q.hint || "Use the context of the sentence to choose the best answer.";
 }
 
 /* ---------------------------
@@ -1031,7 +1003,7 @@ function renderVocabChips(){
 }
 
 /* ---------------------------
-   RENDER QUESTION
+   QUESTION ACCESS
 ---------------------------- */
 function getCurrentQuestion(){
   const qIndex = (mode === "Main") ? order[idx] : missed[idx];
@@ -1039,35 +1011,30 @@ function getCurrentQuestion(){
 }
 
 function setRightPanelVisibilityForSection(section){
-  // Hide vocab list during spelling only
   const hide = section.includes("Spelling");
   vocabChips.style.display = hide ? "none" : "flex";
   vocabHiddenNote.style.display = hide ? "block" : "none";
 }
 
+/* ---------------------------
+   RENDER
+---------------------------- */
 function render(){
   setHeader();
 
-  const { q, qIndex } = getCurrentQuestion();
+  const { q } = getCurrentQuestion();
   attempts = 0;
   answeredCorrect = false;
-  spellChecked = false;
-  spellingLocked = false;
 
   currentTaskTag.textContent = sectionLabel(q.section);
 
-  // Pill
-  sectionPill.innerHTML = `<strong>${q.section}</strong> <span id="sectionSub">• ${q.type === "spell" ? "click letters to spell" : "choose the best answer"}</span>`;
-  // update sectionSub reference (since we replaced it)
-  // (not required; simple)
-  // Title
+  sectionPill.innerHTML = `<strong>${q.section}</strong> <span>• ${q.type === "spell" ? "click letters to spell" : "choose the best answer"}</span>`;
   qTitle.textContent = (mode === "Main")
     ? `Question ${idx+1} of ${QUESTIONS.length}`
     : `Review ${idx+1} of ${missed.length}`;
 
   qPrompt.textContent = q.prompt;
 
-  // excerpt
   if(q.section.includes("Reading")){
     excerptBox.style.display = "block";
     excerptBox.textContent = q.excerpt;
@@ -1076,45 +1043,32 @@ function render(){
     excerptBox.textContent = "";
   }
 
-  // Hide/show vocab list
   setRightPanelVisibilityForSection(q.section);
-
-  // Reset UI blocks
   clearMCQUI();
 
-  // Spelling vs MCQ
   if(q.type === "spell"){
     optionsEl.style.display = "none";
     hintBox.style.display = "none";
     feedbackEl.style.display = "none";
     spellBox.style.display = "block";
-
     initSpelling(q);
   }else{
     spellBox.style.display = "none";
     optionsEl.style.display = "grid";
     hintBox.style.display = "block";
     feedbackEl.style.display = "block";
-
     renderOptions(q);
-    // default hint based on question
-    showHint(q.hint);
-    // but keep hint button meaningful: it can show a DIFFERENT hint (context-focused)
-    hintShown = false;
-    hintBox.innerHTML = "<strong>Hint:</strong> Click <strong>Show hint</strong> if you need help using the context.";
   }
 
-  // Next button disabled until correct
   nextBtn.disabled = true;
 }
 
 /* ---------------------------
-   MCQ LOGIC
+   MCQ
 ---------------------------- */
 function renderOptions(q){
   optionsEl.innerHTML = "";
-  const opts = q.options;
-  opts.forEach((opt, i)=>{
+  q.options.forEach((opt, i)=>{
     const b = document.createElement("button");
     b.className = "optBtn";
     b.textContent = opt;
@@ -1130,57 +1084,30 @@ function handleMCQAnswer(choiceIndex, q){
 
   if(choiceIndex === q.answer){
     answeredCorrect = true;
+    if(mode === "Main") correctCount += 1;
 
-    // Only count scores in Main mode (Review mode is practice)
-    if(mode === "Main"){
-      correctCount += 1;
-      smileyCount += smileysForAttempt(attempts);
-    }
-
-    feedbackEl.textContent = `Correct! You earned ${smileysForAttempt(attempts)} 🙂.`;
+    feedbackEl.textContent = "Correct.";
     feedbackEl.className = "feedback good";
     disableAllOptions(true);
     nextBtn.disabled = false;
   }else{
-    // Wrong — keep options enabled, give a context-based clue (NOT letter-start)
     feedbackEl.textContent = "Not yet. Read the hint and try again.";
     feedbackEl.className = "feedback bad";
 
-    // If they haven't asked for hint yet, auto-provide a more context-based hint
-    const contextHint = buildContextHint(q);
-    hintBox.innerHTML = `<strong>Hint:</strong> ${contextHint}`;
-    hintShown = true;
+    hintBox.innerHTML = `<strong>Hint:</strong> ${buildContextHint(q)}`;
 
-    // Track for review (only in Main)
-    if(mode === "Main" && !missed.includes(order[idx])){
-      missed.push(order[idx]);
+    if(mode === "Main"){
+      const qIndex = order[idx];
+      if(!missed.includes(qIndex)) missed.push(qIndex);
     }
   }
 
   setHeader();
 }
 
-function buildContextHint(q){
-  // More helpful, context-focused hints (no “starts with letter”)
-  if(q.section.includes("Use")){
-    return "Look at the whole sentence. What action is happening? Which option is the correct verb or noun for that meaning?";
-  }
-  if(q.section.includes("Meaning")){
-    return "Match the definition to the word: ask yourself, ‘Is it a person, a place, a thing, or an action?’";
-  }
-  if(q.section.includes("Reading")){
-    return "Use evidence: which choice matches what the excerpt directly suggests? Avoid choices that add new information.";
-  }
-  return q.hint || "Use the context of the sentence to choose the best word.";
-}
-
 /* ---------------------------
-   SPELLING LOGIC (click letters)
-   - Show only blanks initially (no pattern clue).
-   - Clue button reveals one correct letter in the correct position each click.
-   - If wrong, show Try Again + optional Clue button.
+   SPELLING (click letters)
 ---------------------------- */
-
 function initSpelling(q){
   spellTarget = q.word.toLowerCase();
   spellBuild = [];
@@ -1188,8 +1115,6 @@ function initSpelling(q){
   spellFeedback.className = "feedback";
   spellTryRow.style.display = "none";
 
-  // Build letter bank from target letters (no spaces for these spelling words)
-  // Add a few extra distractor letters to make it feel like a puzzle but not too hard.
   const letters = spellTarget.split("");
   const distractorsPool = "aeiourstlnmdgpcvhtb".split("");
   let distractors = [];
@@ -1197,33 +1122,26 @@ function initSpelling(q){
     const ch = distractorsPool[Math.floor(Math.random()*distractorsPool.length)];
     distractors.push(ch);
   }
-
   letterBank = shuffle([...letters, ...distractors]);
-
-  // revealed letters (clue system)
   revealed = new Array(letters.length).fill(false);
 
   renderSpellingBlanks();
   renderLetterBank();
 
-  // Spelling hint area: ONLY meaning hint, no letter pattern.
-  spellHint.innerHTML = `<strong>Hint:</strong> ${q.hint || "Use the clue sentence. If stuck, click Clue to reveal one letter."}`;
+  spellHint.innerHTML = `<strong>Hint:</strong> ${q.hint || "Use the clue sentence. If stuck, click Clue to reveal one letter in the correct place."}`;
 
-  backspaceBtn.onclick = () => { if(!spellingLocked) doBackspace(); };
-  clearBtn.onclick = () => { if(!spellingLocked) doClear(); };
-  clueBtn.onclick = () => { if(!spellingLocked) revealOneLetter(); };
-  submitSpellBtn.onclick = () => { if(!spellingLocked) checkSpelling(); };
+  backspaceBtn.onclick = () => doBackspace();
+  clearBtn.onclick = () => doClear();
+  clueBtn.onclick = () => revealOneLetter();
+  submitSpellBtn.onclick = () => checkSpelling();
 
   tryAgainSpellBtn.onclick = () => {
     spellTryRow.style.display = "none";
     spellFeedback.textContent = "";
     spellFeedback.className = "feedback";
-    spellingLocked = false;
-    // keep what they built? better to clear for a clean try:
     doClear();
   };
-
-  showClueSpellBtn.onclick = () => { if(!spellingLocked) revealOneLetter(); };
+  showClueSpellBtn.onclick = () => revealOneLetter();
 }
 
 function renderSpellingBlanks(){
@@ -1233,23 +1151,18 @@ function renderSpellingBlanks(){
     if(i < spellBuild.length) return spellBuild[i].toUpperCase();
     return "_";
   });
-  // space between underscores for readability
   spellBlanks.textContent = display.join(" ");
 }
 
 function renderLetterBank(){
   letterBankEl.innerHTML = "";
-  letterBank.forEach((ch, idxBtn)=>{
+  letterBank.forEach((ch)=>{
     const b = document.createElement("button");
     b.className = "letterBtn";
     b.textContent = ch.toUpperCase();
     b.addEventListener("click", ()=>{
-      if(spellingLocked) return;
       if(spellBuild.length >= spellTarget.length) return;
-
-      // place next letter in build
       spellBuild.push(ch);
-      // disable this exact button (single-use)
       b.disabled = true;
       renderSpellingBlanks();
     });
@@ -1260,7 +1173,6 @@ function renderLetterBank(){
 function doBackspace(){
   if(spellBuild.length === 0) return;
   const removed = spellBuild.pop();
-  // re-enable one matching disabled button for that letter (best-effort)
   const btns = [...letterBankEl.querySelectorAll("button")];
   const btn = btns.find(x => x.disabled && x.textContent.toLowerCase() === removed);
   if(btn) btn.disabled = false;
@@ -1269,27 +1181,19 @@ function doBackspace(){
 
 function doClear(){
   spellBuild = [];
-  // re-enable all letter buttons
   const btns = letterBankEl.querySelectorAll("button");
   btns.forEach(b=> b.disabled = false);
   renderSpellingBlanks();
 }
 
 function revealOneLetter(){
-  // Reveal a letter position that isn't revealed yet.
-  // Prefer early positions to support decoding.
   const n = revealed.length;
   let candidates = [];
-  for(let i=0;i<n;i++){
-    if(!revealed[i]) candidates.push(i);
-  }
+  for(let i=0;i<n;i++) if(!revealed[i]) candidates.push(i);
   if(candidates.length === 0) return;
 
   const pick = candidates[Math.floor(Math.random()*candidates.length)];
   revealed[pick] = true;
-
-  // If they already built a letter at that position but it's wrong, keep it visible as wrong via build;
-  // We won't overwrite their build; the revealed letter gives evidence, and they can clear/backspace.
   renderSpellingBlanks();
 
   spellFeedback.textContent = "Clue used: one letter is revealed in the correct position.";
@@ -1307,52 +1211,34 @@ function checkSpelling(){
   const built = spellBuild.join("").toLowerCase();
 
   if(built === spellTarget){
-    // Correct
-    spellingLocked = true;
+    if(mode === "Main") correctCount += 1;
 
-    if(mode === "Main"){
-      correctCount += 1;
-      smileyCount += smileysForAttempt(attempts);
-    }
-
-    spellFeedback.textContent = `Correct! You earned ${smileysForAttempt(attempts)} 🙂.`;
+    spellFeedback.textContent = "Correct.";
     spellFeedback.className = "feedback good";
 
-    // disable letter buttons
     const btns = letterBankEl.querySelectorAll("button");
     btns.forEach(b=> b.disabled = true);
 
     nextBtn.disabled = false;
-    setHeader();
   }else{
-    // Wrong
-    spellFeedback.textContent = "Not yet. Try again. Use the clue sentence, then click Clue if you need help.";
+    spellFeedback.textContent = "Not yet. Try again. If you need help, click Clue to reveal one letter.";
     spellFeedback.className = "feedback bad";
 
-    if(mode === "Main" && !missed.includes(order[idx])){
-      missed.push(order[idx]);
+    if(mode === "Main"){
+      const qIndex = order[idx];
+      if(!missed.includes(qIndex)) missed.push(qIndex);
     }
 
-    // show Try Again row
     spellTryRow.style.display = "flex";
-    // lock only slightly? keep unlocked so they can fix; but user asked Try Again button.
-    // We'll keep unlocked; Try Again just clears.
-    spellingLocked = false;
-
-    setHeader();
   }
+
+  setHeader();
 }
 
 /* ---------------------------
    NAVIGATION
 ---------------------------- */
-nextBtn.addEventListener("click", ()=>{
-  if(!answeredCorrect && QUESTIONS[getCurrentQuestion().qIndex].type !== "spell"){
-    return;
-  }
-  // For spelling, next enabled only when correct anyway.
-  goNext();
-});
+nextBtn.addEventListener("click", ()=> goNext());
 
 function goNext(){
   idx += 1;
@@ -1373,13 +1259,11 @@ function goNext(){
 function startReview(){
   mode = "Review";
   idx = 0;
-  // De-duplicate missed (it contains question indexes already)
   missed = [...new Set(missed)];
   render();
 }
 
 function showEnd(){
-  // Replace main card content with summary
   const mainCard = document.querySelector(".layout .card .cardInner");
   const wrongCount = (mode === "Main") ? missed.length : 0;
 
@@ -1388,7 +1272,6 @@ function showEnd(){
     <div class="qTitle">All done!</div>
     <div class="endBox">
       <div><strong>Correct:</strong> ${correctCount} / ${QUESTIONS.length}</div>
-      <div><strong>Smiley faces earned:</strong> ${smileyCount}</div>
       <div style="margin-top:10px;">
         ${wrongCount > 0
           ? `You reviewed the questions you missed. If you still feel unsure, review these words:`
@@ -1404,11 +1287,10 @@ function showEnd(){
     </div>
   `;
 
-  // Update header badges
   modeText.textContent = "Complete";
   progressText.textContent = `25/25`;
+  pbFill.style.width = `100%`;
   scoreText.textContent = correctCount;
-  smileyText.textContent = smileyCount;
   currentTaskTag.textContent = "Complete";
 }
 
@@ -1429,20 +1311,8 @@ function escapeHtml(s){
 ---------------------------- */
 hintBtn.addEventListener("click", ()=>{
   const { q } = getCurrentQuestion();
-  if(q.type === "spell"){
-    return;
-  }
-  const extra = buildContextHint(q);
-  // Make it more “context-use” oriented and not repetitive
-  let extra2 = extra;
-  if(q.section.includes("Use")){
-    extra2 = "Underline the blank mentally. Ask: Do I need an action (verb) or a thing (noun)? Which option matches the meaning and fits the sentence?";
-  }else if(q.section.includes("Meaning")){
-    extra2 = "Ask: Is the definition describing a person, a place, a thing, or an action? Eliminate options that don’t match the category.";
-  }else if(q.section.includes("Reading")){
-    extra2 = "Choose the option that is supported by the excerpt. If it adds new ideas, it’s probably wrong.";
-  }
-  showHint(extra2);
+  if(q.type === "spell") return;
+  hintBox.innerHTML = `<strong>Hint:</strong> ${buildContextHint(q)}`;
 });
 
 /* ---------------------------
