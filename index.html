@@ -8,226 +8,158 @@
     :root{
       --bg0:#071424;
       --bg1:#0b1f36;
-      --card:#0f2a45;
-      --card2:#0c223a;
       --stroke:rgba(255,255,255,.10);
       --stroke2:rgba(255,255,255,.14);
       --text:rgba(255,255,255,.92);
       --muted:rgba(255,255,255,.70);
       --muted2:rgba(255,255,255,.55);
-      --good:#35c26b;
       --bad:#ff5d5d;
-      --warn:#ffcc66;
       --accent:#7aa7ff;
       --chip:rgba(255,255,255,.08);
       --shadow: 0 18px 70px rgba(0,0,0,.55);
       --radius: 22px;
     }
-
     *{ box-sizing:border-box; }
     html,body{ height:100%; }
     body{
       margin:0;
-      font-family: "Century Gothic", "Trebuchet MS", Arial, sans-serif;
+      font-family: "Century Gothic","Trebuchet MS",Arial,sans-serif;
       color:var(--text);
       background:
         radial-gradient(1200px 700px at 18% 18%, rgba(122,167,255,.18), transparent 60%),
         radial-gradient(1000px 600px at 82% 12%, rgba(255,204,102,.10), transparent 55%),
         radial-gradient(900px 650px at 75% 85%, rgba(53,194,107,.10), transparent 55%),
         linear-gradient(180deg, var(--bg1), var(--bg0));
-      padding: 18px 14px;
+      padding:18px 14px;
       padding-bottom: env(safe-area-inset-bottom);
       overflow-x:hidden;
     }
-
-    .bg-decor { pointer-events:none; }
-
     .wrap{
-      max-width: 1200px;
-      margin: 0 auto;
+      max-width:1200px;
+      margin:0 auto;
       display:grid;
       grid-template-columns: 1.65fr .95fr;
-      gap: 16px;
+      gap:16px;
       align-items:start;
     }
-
-    @media (max-width: 960px){
-      .wrap{ grid-template-columns: 1fr; }
-    }
+    @media (max-width: 960px){ .wrap{ grid-template-columns: 1fr; } }
 
     .topbar{
-      grid-column: 1 / -1;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:14px;
-      padding: 16px 16px;
-      border: 1px solid var(--stroke);
+      grid-column:1/-1;
+      display:flex; align-items:center; justify-content:space-between; gap:14px;
+      padding:16px;
+      border:1px solid var(--stroke);
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      position: relative;
-      z-index: 2;
-      pointer-events:auto;
+      position: relative; z-index: 2;
     }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      min-width: 260px;
-    }
-
+    .brand{ display:flex; align-items:center; gap:14px; min-width: 260px; }
     .logo{
       width:54px; height:54px;
-      border-radius: 14px;
+      border-radius:14px;
       border:1px solid var(--stroke2);
       background: rgba(255,255,255,.05);
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      display:flex; align-items:center; justify-content:center;
       overflow:hidden;
-      flex: 0 0 auto;
+      flex:0 0 auto;
     }
     .logo img{ width:100%; height:100%; object-fit:cover; display:block; }
-
     .titleblock{ line-height:1.1; }
-    .titleblock h1{
-      margin:0;
-      font-size: clamp(20px, 3.2vw, 36px);
-      letter-spacing:.2px;
-    }
-    .subtitle{
-      margin-top:6px;
-      font-size: 14px;
-      color: var(--muted);
-    }
+    .titleblock h1{ margin:0; font-size: clamp(20px, 3.2vw, 36px); }
+    .subtitle{ margin-top:6px; font-size:14px; color: var(--muted); }
 
-    .chips{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      align-items:center;
-      justify-content:flex-end;
-    }
-
+    .chips{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:flex-end; }
     .chip{
       background: var(--chip);
       border:1px solid var(--stroke);
       padding:10px 12px;
-      border-radius: 999px;
-      display:flex;
-      gap:10px;
-      align-items:center;
-      font-size: 14px;
-      color: var(--muted);
-      min-width: 150px;
+      border-radius:999px;
+      display:flex; gap:10px; align-items:center;
+      font-size:14px; color: var(--muted);
+      min-width:150px;
       justify-content:space-between;
     }
-    .chip b{ color: var(--text); font-weight:700; }
+    .chip b{ color: var(--text); }
 
     .progressbar{
-      grid-column: 1 / -1;
+      grid-column:1/-1;
       border:1px solid var(--stroke);
       background: rgba(255,255,255,.04);
-      border-radius: 999px;
-      height: 10px;
+      border-radius:999px;
+      height:10px;
       overflow:hidden;
       box-shadow: 0 10px 30px rgba(0,0,0,.35);
-      position: relative;
-      z-index: 1;
       pointer-events:none;
     }
     .progressbar > div{
-      height: 100%;
-      width: 0%;
+      height:100%;
+      width:0%;
       background: linear-gradient(90deg, rgba(122,167,255,.85), rgba(53,194,107,.80));
       transition: width .25s ease;
     }
 
     .panel{
-      border: 1px solid var(--stroke);
+      border:1px solid var(--stroke);
       background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025));
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 18px;
+      padding:18px;
       position: relative;
       z-index: 2;
-      pointer-events:auto;
     }
-
-    .panel h2{
-      margin:0 0 8px;
-      font-size: 18px;
-      letter-spacing:.2px;
-    }
-    .panel .muted{ color: var(--muted); font-size: 13px; line-height:1.35; }
+    .panel h2{ margin:0 0 8px; font-size:18px; }
+    .panel .muted{ color: var(--muted); font-size:13px; line-height:1.35; }
 
     .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
+      display:inline-flex; align-items:center; gap:10px;
       padding:10px 12px;
       border:1px solid var(--stroke);
       background: rgba(0,0,0,.15);
-      border-radius: 999px;
+      border-radius:999px;
       color: var(--muted);
-      font-size: 13px;
-      margin-bottom: 14px;
+      font-size:13px;
+      margin-bottom:14px;
     }
-
     .tag{
       display:inline-block;
       padding:8px 12px;
       border:1px solid var(--stroke);
-      border-radius: 999px;
+      border-radius:999px;
       background: rgba(255,255,255,.06);
       color: var(--muted);
-      font-size: 13px;
-      margin-bottom: 10px;
+      font-size:13px;
+      margin-bottom:10px;
     }
-
     .questionTitle{
       font-size: clamp(22px, 4vw, 40px);
-      margin: 8px 0 10px;
-      letter-spacing: .3px;
+      margin:8px 0 10px;
     }
-
     .qPrompt{
-      font-size: 18px;
-      line-height: 1.45;
-      color: var(--text);
-      margin-bottom: 14px;
+      font-size:18px;
+      line-height:1.45;
+      margin-bottom:14px;
       white-space: pre-line;
     }
 
     .options{
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 12px;
-      position: relative;
-      z-index: 10;
-      pointer-events:auto;
+      gap:12px;
+      margin-top:12px;
     }
-    @media (max-width: 520px){
-      .options{ grid-template-columns: 1fr; }
-    }
-
+    @media (max-width: 520px){ .options{ grid-template-columns: 1fr; } }
     button.option{
       appearance:none;
       border:1px solid var(--stroke2);
       background: rgba(0,0,0,.18);
       color: var(--text);
-      padding: 14px 14px;
-      border-radius: 18px;
+      padding:14px;
+      border-radius:18px;
       text-align:left;
-      font-size: 16px;
+      font-size:16px;
       cursor:pointer;
       transition: transform .08s ease, border-color .12s ease, background .12s ease;
-      position: relative;
-      z-index: 10;
-      pointer-events:auto;
       touch-action: manipulation;
     }
     button.option:hover{
@@ -235,166 +167,117 @@
       border-color: rgba(122,167,255,.55);
       background: rgba(122,167,255,.10);
     }
-    button.option:disabled{
-      cursor: default;
-      opacity: .6;
-      transform:none;
-    }
-    button.option.correct{
-      border-color: rgba(53,194,107,.75);
-      background: rgba(53,194,107,.14);
-    }
-    button.option.wrong{
-      border-color: rgba(255,93,93,.72);
-      background: rgba(255,93,93,.12);
-    }
+    button.option:disabled{ cursor:default; opacity:.6; transform:none; }
+    button.option.correct{ border-color: rgba(53,194,107,.75); background: rgba(53,194,107,.14); }
+    button.option.wrong{ border-color: rgba(255,93,93,.72); background: rgba(255,93,93,.12); }
 
     .feedback{
-      margin-top: 14px;
-      padding: 14px 14px;
-      border-radius: 16px;
-      border: 1px solid var(--stroke);
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      border:1px solid var(--stroke);
       background: rgba(0,0,0,.14);
-      min-height: 54px;
+      min-height:54px;
       color: var(--muted);
       line-height:1.45;
-      font-size: 14px;
+      font-size:14px;
     }
     .feedback.good{ border-color: rgba(53,194,107,.35); color: rgba(255,255,255,.90); }
     .feedback.bad{ border-color: rgba(255,93,93,.35); color: rgba(255,255,255,.90); }
-    .feedback .smiles{ font-size: 18px; margin-left: 8px; }
+    .feedback .smiles{ font-size:18px; margin-left:8px; }
 
     .controls{
-      display:flex;
-      flex-wrap:wrap;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      margin-top: 14px;
+      display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
+      gap:10px;
+      margin-top:14px;
     }
     .btn{
       appearance:none;
       border:1px solid var(--stroke2);
       background: rgba(255,255,255,.06);
       color: var(--text);
-      padding: 12px 16px;
-      border-radius: 999px;
+      padding:12px 16px;
+      border-radius:999px;
       cursor:pointer;
-      font-size: 14px;
+      font-size:14px;
       transition: transform .08s ease, background .12s ease, border-color .12s ease;
-      pointer-events:auto;
       touch-action: manipulation;
     }
     .btn:hover{ transform: translateY(-1px); border-color: rgba(122,167,255,.55); background: rgba(122,167,255,.10); }
-    .btn.primary{
-      background: rgba(122,167,255,.18);
-      border-color: rgba(122,167,255,.42);
-    }
-    .btn:disabled{ opacity:.55; cursor: default; transform:none; }
+    .btn.primary{ background: rgba(122,167,255,.18); border-color: rgba(122,167,255,.42); }
+    .btn:disabled{ opacity:.55; cursor:default; transform:none; }
 
     .link{
       color: rgba(255,255,255,.78);
       text-decoration: underline;
       cursor:pointer;
       background: transparent;
-      border: none;
-      padding: 8px 10px;
-      border-radius: 10px;
-      pointer-events:auto;
+      border:none;
+      padding:8px 10px;
+      border-radius:10px;
       touch-action: manipulation;
     }
-    .link:hover{ color: #fff; }
+    .link:hover{ color:#fff; }
 
     .box{
       border:1px solid var(--stroke);
       background: rgba(0,0,0,.16);
-      border-radius: 18px;
-      padding: 14px;
-      margin-top: 12px;
+      border-radius:18px;
+      padding:14px;
+      margin-top:12px;
     }
-    .box h3{
-      margin:0 0 8px;
-      font-size: 14px;
-      color: rgba(255,255,255,.85);
-      letter-spacing:.2px;
-    }
-    .list{
-      margin:0;
-      padding-left: 16px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height:1.55;
-    }
+    .box h3{ margin:0 0 8px; font-size:14px; color: rgba(255,255,255,.85); }
+    .list{ margin:0; padding-left:16px; color: var(--muted); font-size:13px; line-height:1.55; }
+
     .vocabGrid{
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px 18px;
-      margin-top: 8px;
+      gap:10px 18px;
+      margin-top:8px;
       color: var(--muted);
-      font-size: 13px;
+      font-size:13px;
     }
-    .vocabGrid .col h4{
-      margin:0 0 6px;
-      font-size: 12px;
-      color: rgba(255,255,255,.80);
-      font-weight:700;
-      letter-spacing:.2px;
-    }
-    .vocabGrid ul{
-      margin:0;
-      padding-left: 16px;
-    }
+    .vocabGrid .col h4{ margin:0 0 6px; font-size:12px; color: rgba(255,255,255,.80); font-weight:700; }
+    .vocabGrid ul{ margin:0; padding-left:16px; }
 
-    .sideCollapseToggle{
-      display:none;
-      width:100%;
-      margin-top: 12px;
-    }
+    .sidebar{ }
+    .sideCollapseToggle{ display:none; width:100%; margin-top:12px; }
     @media (max-width: 960px){
       .sideCollapseToggle{ display:block; }
       .sidebar{ display:none; }
       .sidebar.open{ display:block; }
     }
 
-    /* SPELLING */
     .spellWrap{
       border:1px solid var(--stroke);
       background: rgba(0,0,0,.14);
-      border-radius: 18px;
-      padding: 14px;
-      margin-top: 10px;
-      position: relative;
-      z-index: 10;
-      pointer-events:auto;
+      border-radius:18px;
+      padding:14px;
+      margin-top:10px;
     }
     .spellTop{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
       flex-wrap:wrap;
-      margin-bottom: 10px;
+      margin-bottom:10px;
     }
     .timerPill{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding: 10px 12px;
-      border-radius: 999px;
+      display:flex; align-items:center; gap:10px;
+      padding:10px 12px;
+      border-radius:999px;
       border:1px solid rgba(255,255,255,.14);
       background: rgba(0,0,0,.18);
       color: var(--muted);
-      font-size: 13px;
-      min-width: 220px;
+      font-size:13px;
+      min-width:240px;
       justify-content:space-between;
     }
     .timerBar{
-      height: 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.12);
+      height:8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
       overflow:hidden;
       background: rgba(255,255,255,.05);
-      margin-top: 8px;
+      margin-top:8px;
     }
     .timerBar > div{
       height:100%;
@@ -408,71 +291,51 @@
       flex-wrap:wrap;
       gap:8px;
       align-items:center;
-      padding: 10px 10px;
-      border-radius: 14px;
+      padding:10px;
+      border-radius:14px;
       border:1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.04);
-      min-height: 54px;
-      font-size: 20px;
-      letter-spacing: 3px;
+      min-height:54px;
+      font-size:20px;
+      letter-spacing:3px;
     }
     .slot{
-      width: 22px;
+      width:22px;
       text-align:center;
       color: rgba(255,255,255,.92);
-      border-bottom: 2px solid rgba(255,255,255,.30);
-      padding-bottom: 2px;
+      border-bottom:2px solid rgba(255,255,255,.30);
+      padding-bottom:2px;
     }
     .slot.revealed{
-      color: rgba(255,255,255,.95);
       border-bottom-color: rgba(53,194,107,.55);
+      color: rgba(255,255,255,.95);
     }
 
     .letters{
       display:flex;
       flex-wrap:wrap;
-      gap: 10px;
-      margin-top: 12px;
-      position: relative;
-      z-index: 10;
-      pointer-events:auto;
+      gap:10px;
+      margin-top:12px;
       touch-action: manipulation;
     }
     .letterBtn{
-      width: 48px;
-      height: 46px;
-      border-radius: 16px;
+      width:48px;
+      height:46px;
+      border-radius:16px;
       border:1px solid rgba(255,255,255,.14);
       background: rgba(0,0,0,.18);
       color: rgba(255,255,255,.92);
-      font-size: 16px;
+      font-size:16px;
       cursor:pointer;
       transition: transform .08s ease, background .12s ease, border-color .12s ease;
-      position: relative;
-      z-index: 10;
-      pointer-events:auto;
       touch-action: manipulation;
     }
     .letterBtn:hover{ transform: translateY(-1px); border-color: rgba(122,167,255,.55); background: rgba(122,167,255,.10); }
-    .letterBtn:disabled{ opacity:.45; cursor: default; transform:none; }
+    .letterBtn:disabled{ opacity:.45; cursor:default; transform:none; }
 
-    .spellControls{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top: 12px;
-    }
-
-    .smallNote{
-      margin-top: 8px;
-      color: var(--muted2);
-      font-size: 12px;
-      line-height:1.4;
-    }
-
-    .hide{
-      display:none !important;
-    }
+    .spellControls{ display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+    .smallNote{ margin-top:8px; color: var(--muted2); font-size:12px; line-height:1.4; }
+    .hide{ display:none !important; }
   </style>
 </head>
 
@@ -518,7 +381,7 @@
           </div>
           <div class="timerPill">
             <span id="timerStatus">Timer starts on your first click</span>
-            <b id="timeLeft">15s</b>
+            <b id="timeLeft">20s</b>
           </div>
         </div>
 
@@ -535,7 +398,7 @@
 
         <div class="spellControls">
           <button class="btn" id="btnBack">Backspace</button>
-          <button class="btn" id="btnClear">Clear</button>
+          <button class="btn" id="btnClear">Clear (restart timer)</button>
           <button class="btn" id="btnClue">Clue (reveal 1 letter)</button>
           <button class="btn primary" id="btnCheckSpell">Check</button>
           <button class="btn" id="btnTryAgainSpell" style="display:none;">Try again</button>
@@ -543,6 +406,7 @@
 
         <div class="smallNote" id="spellNote">
           The timer begins when you click your first letter.
+          If you press <b>Clear</b>, your attempt resets and the timer will start again on your next click.
           If time is up, the correct answer will be shown.
         </div>
       </div>
@@ -613,22 +477,12 @@
         </ul>
       </div>
 
-      <div class="box">
-        <h3>Progress tips</h3>
-        <ul class="list">
-          <li>Look for key words in the definition (job? place? material?).</li>
-          <li>For Use questions, check the sentence meaning first, then grammar.</li>
-          <li>For Reading, match the question to the evidence in the excerpt.</li>
-        </ul>
-      </div>
-
       <div class="smallNote">
         Logo note (GitHub): keep your logo file in the same folder as <b>index.html</b> and name it <b>logo.png</b>.
       </div>
     </div>
 
     <button class="btn sideCollapseToggle" id="toggleSidebar">Show / hide Quick Info</button>
-
   </div>
 
 <script>
@@ -709,7 +563,7 @@ const QUESTIONS = [
    correct:"sedimentary", wrong:["dinosaur","favorite","ash"],
    hint:"This word describes rock formed from deposits that often build up in layers."},
 
-  // 5 SPELLING
+  // 5 SPELLING (click letters)
   {type:"spell", section:"Vocabulary – Spelling", micro:"click letters to spell",
    prompt:"Spelling:\nA scientist who studies fossils and ancient life on Earth.",
    answer:"paleontologist", hint:"Think: a job title for fossil scientists."},
@@ -758,6 +612,9 @@ let spellRevealed = [];
 let spellBuilt = [];
 let letterButtons = [];
 let timerStarted = false;
+let timerStartAt = 0;
+
+const TIMER_MS = 20000; // 20 seconds
 
 const chipProgress = document.getElementById("chipProgress");
 const chipCorrect = document.getElementById("chipCorrect");
@@ -874,8 +731,6 @@ function renderMCQ(q){
     b.className = "option";
     b.type = "button";
     b.textContent = text;
-    b.style.pointerEvents = "auto";
-    b.style.zIndex = "10";
     b.addEventListener("click", () => handleMCQChoice(b, text, q.correct));
     optionsEl.appendChild(b);
   });
@@ -920,14 +775,14 @@ function handleMCQChoice(btn, chosenText, correctText){
 
 /* =========================
    SPELLING: timer starts on FIRST letter click
+   Clear => restart attempt and timer will start again on next click
    ========================= */
 function initSpelling(q){
   spellLocked = false;
   timerStarted = false;
+  timerStartAt = 0;
 
-  timeLeftEl.textContent = "15s";
-  timerFill.style.width = "100%";
-  timerStatus.textContent = "Timer starts on your first click";
+  setTimerUIIdle();
 
   const answer = q.answer.toLowerCase().trim();
 
@@ -960,6 +815,7 @@ function initSpelling(q){
       // START TIMER ON FIRST CLICK
       if (!timerStarted){
         timerStarted = true;
+        timerStartAt = Date.now();
         timerStatus.textContent = "Time left:";
         startSpellTimer(answer);
       }
@@ -978,9 +834,25 @@ function initSpelling(q){
   btnTryAgainSpell.style.display = "none";
 
   btnBack.onclick = () => { if (!spellLocked) backspaceLetter(); };
-  btnClear.onclick = () => { if (!spellLocked) clearNonRevealed(); };
+
+  btnClear.onclick = () => {
+    if (spellLocked) return;
+    clearNonRevealed();
+    enableAllLetterButtons();
+    // stop and reset timer; next click starts again
+    stopSpellTimer();
+    timerStarted = false;
+    timerStartAt = 0;
+    setTimerUIIdle();
+    feedbackEl.className = "feedback";
+    feedbackEl.innerHTML = `<b>Cleared.</b> Start again. The timer will begin when you click your first letter.`;
+    btnTryAgainSpell.style.display = "none";
+  };
+
   btnClue.onclick = () => { if (!spellLocked) revealOneLetter(answer); };
+
   btnCheckSpell.onclick = () => { if (!spellLocked) checkSpelling(answer, false); };
+
   btnTryAgainSpell.onclick = () => {
     if (spellLocked) return;
     clearNonRevealed();
@@ -989,6 +861,12 @@ function initSpelling(q){
     feedbackEl.className = "feedback";
     feedbackEl.innerHTML = `<b>Try again.</b> Use the slots and click letters carefully. You may use <b>Clue</b> if needed.`;
   };
+}
+
+function setTimerUIIdle(){
+  timerStatus.textContent = "Timer starts on your first click";
+  timeLeftEl.textContent = Math.ceil(TIMER_MS/1000) + "s";
+  timerFill.style.width = "100%";
 }
 
 function renderSlots(){
@@ -1124,18 +1002,18 @@ function checkSpelling(answer, fromTimeUp){
 
 function startSpellTimer(answer){
   stopSpellTimer();
-  const totalMs = 15000;
-  const start = Date.now();
-
+  // timerStartAt already set at first click
   spellTimer = setInterval(() => {
     if (spellLocked) return;
-    const elapsed = Date.now() - start;
-    const remain = Math.max(0, totalMs - elapsed);
+    if (!timerStarted) return;
+
+    const elapsed = Date.now() - timerStartAt;
+    const remain = Math.max(0, TIMER_MS - elapsed);
 
     const seconds = Math.ceil(remain / 1000);
     timeLeftEl.textContent = seconds + "s";
 
-    const pct = (remain / totalMs) * 100;
+    const pct = (remain / TIMER_MS) * 100;
     timerFill.style.width = pct + "%";
 
     if (remain <= 0){
