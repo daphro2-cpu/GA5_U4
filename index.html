@@ -427,11 +427,20 @@
     }
     .spellTopRow{
       display:flex;
-      align-items:center;
+      align-items:flex-start;
       justify-content:space-between;
       gap:12px;
       flex-wrap:wrap;
       margin-bottom:10px;
+    }
+
+    .timerArea{
+      min-width: 220px;
+      flex: 0 0 auto;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      align-items:flex-end;
     }
     .timerPill{
       display:inline-flex;
@@ -447,6 +456,25 @@
     }
     .timerPill strong{ color:rgba(255,255,255,0.95); }
     .timerWarn{ border-color: rgba(255,77,79,0.35); background: rgba(255,77,79,0.10); }
+
+    /* Countdown bar */
+    .countdownTrack{
+      width: 220px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.10);
+      overflow:hidden;
+    }
+    .countdownFill{
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, rgba(119,167,255,0.55), rgba(119,167,255,0.22));
+      transition: width 120ms linear;
+    }
+    .countdownWarn{
+      background: linear-gradient(90deg, rgba(255,77,79,0.55), rgba(255,77,79,0.18));
+    }
 
     .spellAnswerRow{
       display:flex;
@@ -524,6 +552,7 @@
       .badges{ justify-content:flex-start; min-width: unset; width: 100%; }
       .title{ font-size:28px; }
       .pbBadge{ width: 100%; }
+      .timerArea{ align-items:flex-start; }
     }
     @media (max-width: 720px){
       body{ padding:12px; }
@@ -538,6 +567,8 @@
       .badge{ padding:9px 12px; font-size:13px; }
       .blanks{ font-size:22px; letter-spacing:3px; }
       .letterBtn{ min-width:46px; height:46px; border-radius:16px; font-size:18px; }
+      .timerArea{ width:100%; }
+      .countdownTrack{ width:100%; }
     }
   </style>
 </head>
@@ -605,9 +636,15 @@
           <div class="spellBox" id="spellBox" style="display:none;">
             <div class="spellTopRow">
               <div class="qPrompt" style="margin:0; color:rgba(255,255,255,0.78);">
-                <strong>Build the word by clicking letters.</strong> (No typing.)
+                <strong>Build the word by clicking letters.</strong> (Click on the letters.)
               </div>
-              <div class="timerPill" id="timerPill">Time left: <strong id="timerText">15</strong>s</div>
+
+              <div class="timerArea">
+                <div class="timerPill" id="timerPill">Time left: <strong id="timerText">15</strong>s</div>
+                <div class="countdownTrack" aria-label="Countdown bar">
+                  <div class="countdownFill" id="countdownFill"></div>
+                </div>
+              </div>
             </div>
 
             <div class="spellAnswerRow">
@@ -870,12 +907,13 @@ let answeredCorrect = false;
 /* Spelling state */
 let spellTarget = "";
 let revealed = [];
-let buildStack = [];   // array of {id, ch, from:"bank"|"auto"}
-let bankItems = [];    // array of {id, ch, used}
+let buildStack = [];
+let bankItems = [];
 let activeSpell = false;
 
 let spellTimer = null;
 let timeLeft = 15;
+const SPELL_SECONDS = 15;
 
 /* ELEMENTS */
 const progressText = document.getElementById("progressText");
@@ -913,6 +951,7 @@ const spellFeedback = document.getElementById("spellFeedback");
 const spellHint = document.getElementById("spellHint");
 const timerText = document.getElementById("timerText");
 const timerPill = document.getElementById("timerPill");
+const countdownFill = document.getElementById("countdownFill");
 
 /* ROTATE BANNER */
 (function(){
@@ -1009,11 +1048,20 @@ function stopSpellTimer(){
     spellTimer = null;
   }
 }
-function startSpellTimer(seconds=15){
+
+function updateCountdownUI(){
+  timerText.textContent = String(Math.max(0, timeLeft));
+  const pct = Math.max(0, Math.min(1, timeLeft / SPELL_SECONDS));
+  countdownFill.style.width = (pct * 100).toFixed(1) + "%";
+
+  timerPill.classList.toggle("timerWarn", timeLeft <= 5);
+  countdownFill.classList.toggle("countdownWarn", timeLeft <= 5);
+}
+
+function startSpellTimer(seconds=SPELL_SECONDS){
   stopSpellTimer();
   timeLeft = seconds;
-  timerText.textContent = String(timeLeft);
-  timerPill.classList.remove("timerWarn");
+  updateCountdownUI();
 
   spellTimer = setInterval(() => {
     if(!activeSpell){
@@ -1021,10 +1069,8 @@ function startSpellTimer(seconds=15){
       return;
     }
     timeLeft -= 1;
-    timerText.textContent = String(Math.max(0,timeLeft));
-    if(timeLeft <= 5){
-      timerPill.classList.add("timerWarn");
-    }
+    updateCountdownUI();
+
     if(timeLeft <= 0){
       stopSpellTimer();
       timeUpRevealAnswer();
@@ -1033,13 +1079,11 @@ function startSpellTimer(seconds=15){
 }
 
 function timeUpRevealAnswer(){
-  // Mark as missed in main mode
   if(mode === "Main"){
     const qIndex = order[idx];
     if(!missed.includes(qIndex)) missed.push(qIndex);
   }
 
-  // Reveal full correct answer
   buildStack = [];
   const letters = spellTarget.split("");
   for(let i=0;i<letters.length;i++){
@@ -1047,15 +1091,17 @@ function timeUpRevealAnswer(){
   }
   revealed = new Array(letters.length).fill(true);
   renderSpellingBlanks();
-  renderLetterBank(); // disable bank because time is up
+  renderLetterBank();
 
   spellFeedback.textContent = "Time is up. The correct answer is shown. Click Next to continue.";
   spellFeedback.className = "feedback bad";
   nextBtn.disabled = false;
 
-  // Disable controls
   setSpellControlsEnabled(false);
   activeSpell = false;
+
+  timeLeft = 0;
+  updateCountdownUI();
 }
 
 /* RENDER MAIN */
@@ -1147,22 +1193,25 @@ function handleMCQAnswer(choiceIndex, q){
   setHeader();
 }
 
-/* SPELLING (FIXED + TIMED) */
+/* SPELLING */
 function setSpellControlsEnabled(enabled){
   backspaceBtn.disabled = !enabled;
   clearBtn.disabled = !enabled;
   clueBtn.disabled = !enabled;
   submitSpellBtn.disabled = !enabled;
-  // letter buttons
+
   const btns = letterBankEl.querySelectorAll("button");
-  btns.forEach(b => b.disabled = !enabled || b.dataset.used === "1" || b.dataset.locked === "1");
+  btns.forEach(b => {
+    const used = b.dataset.used === "1";
+    const locked = b.dataset.locked === "1";
+    b.disabled = !enabled || used || locked;
+  });
 }
 
 function initSpelling(q){
   spellTarget = q.word.toLowerCase();
   const letters = spellTarget.split("");
 
-  // Reset state
   revealed = new Array(letters.length).fill(false);
   buildStack = [];
   bankItems = [];
@@ -1170,7 +1219,6 @@ function initSpelling(q){
   spellFeedback.className = "feedback";
   spellHint.innerHTML = `<strong>Hint:</strong> ${q.hint || "Use the clue sentence. If stuck, click Clue to reveal one letter."}`;
 
-  // Build letter bank: EXACT target letters + a few distractors
   const distractorPool = "aeiourstlnmdgpcvhtb".split("");
   const distractorCount = Math.min(6, Math.max(2, Math.floor(letters.length/4)));
   let distractors = [];
@@ -1179,8 +1227,6 @@ function initSpelling(q){
   }
 
   const bankLetters = shuffle([...letters, ...distractors]);
-
-  // Assign unique IDs so duplicates work correctly
   bankItems = bankLetters.map((ch, i) => ({ id:`b${Date.now()}_${i}`, ch, used:false }));
 
   renderSpellingBlanks();
@@ -1191,17 +1237,20 @@ function initSpelling(q){
   clueBtn.onclick = () => revealOneLetter();
   submitSpellBtn.onclick = () => checkSpelling();
 
-  // Start timer
+  // IMPORTANT: enable interaction FIRST, then start timer (prevents “couldn’t click anything”)
   activeSpell = true;
   setSpellControlsEnabled(true);
-  startSpellTimer(15);
+
+  // Reset countdown bar immediately
+  timeLeft = SPELL_SECONDS;
+  updateCountdownUI();
+
+  // Start timer on next frame (ensures buttons are clickable before countdown begins)
+  requestAnimationFrame(() => startSpellTimer(SPELL_SECONDS));
 }
 
 function renderSpellingBlanks(){
   const targetLetters = spellTarget.split("");
-
-  // Build current typed string from buildStack (ignoring auto letters? we treat them as fixed)
-  // We'll create an array currentSlots: revealed slots show correct letter; otherwise show typed letters in order.
   const currentTyped = buildStack.filter(x => x.from === "bank").map(x => x.ch);
   let tIndex = 0;
 
@@ -1220,8 +1269,6 @@ function renderSpellingBlanks(){
 
 function renderLetterBank(){
   letterBankEl.innerHTML = "";
-
-  // When time is up, lock everything visually
   const lockAll = !activeSpell;
 
   bankItems.forEach((item)=>{
@@ -1237,7 +1284,6 @@ function renderLetterBank(){
       if(!activeSpell) return;
       if(item.used) return;
 
-      // Prevent adding beyond remaining blanks (non-revealed positions)
       const blanksCount = revealed.filter(r => !r).length;
       const typedCount = buildStack.filter(x => x.from === "bank").length;
       if(typedCount >= blanksCount) return;
@@ -1256,7 +1302,6 @@ function renderLetterBank(){
 
 function doBackspace(){
   if(!activeSpell) return;
-  // Remove last bank-chosen letter (not revealed letters)
   for(let i=buildStack.length-1;i>=0;i--){
     const node = buildStack[i];
     if(node.from === "bank"){
@@ -1265,7 +1310,6 @@ function doBackspace(){
       const item = bankItems.find(x => x.id === node.id);
       if(item) item.used = false;
 
-      // Re-enable exact button with same unique id
       const btn = letterBankEl.querySelector(`button[data-id="${node.id}"]`);
       if(btn){
         btn.dataset.used = "0";
@@ -1280,7 +1324,6 @@ function doBackspace(){
 function doClear(){
   if(!activeSpell) return;
 
-  // Return all used bank letters
   buildStack = buildStack.filter(x => x.from !== "bank");
   bankItems.forEach(x => x.used = false);
 
@@ -1296,7 +1339,6 @@ function doClear(){
 function revealOneLetter(){
   if(!activeSpell) return;
 
-  // Reveal a random unrevealed position (but don't overwrite already revealed)
   const candidates = [];
   for(let i=0;i<revealed.length;i++){
     if(!revealed[i]) candidates.push(i);
@@ -1308,9 +1350,6 @@ function revealOneLetter(){
 
   spellFeedback.textContent = "Clue: one letter is revealed in the correct position.";
   spellFeedback.className = "feedback";
-
-  // If we revealed a letter, we may now have fewer blanks available
-  // If typed letters exceed blanks, do nothing; student can backspace/clear.
   renderSpellingBlanks();
 }
 
@@ -1319,7 +1358,6 @@ function checkSpelling(){
 
   attempts += 1;
 
-  // We only compare bank-typed letters sequence against remaining non-revealed letters sequence
   const targetLetters = spellTarget.split("");
   const remainingTarget = [];
   for(let i=0;i<targetLetters.length;i++){
@@ -1343,7 +1381,6 @@ function checkSpelling(){
     spellFeedback.className = "feedback good";
     nextBtn.disabled = false;
 
-    // Stop timer and lock spelling input
     activeSpell = false;
     stopSpellTimer();
     renderLetterBank();
@@ -1453,3 +1490,4 @@ render();
 </script>
 </body>
 </html>
+
