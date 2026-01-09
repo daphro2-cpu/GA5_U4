@@ -40,7 +40,6 @@
       overflow-x:hidden;
     }
 
-    /* IMPORTANT: decorative layers must not block taps */
     .bg-decor { pointer-events:none; }
 
     .wrap{
@@ -68,7 +67,7 @@
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       position: relative;
-      z-index: 2; /* stays above background only */
+      z-index: 2;
       pointer-events:auto;
     }
 
@@ -208,7 +207,7 @@
       gap: 12px;
       margin-top: 12px;
       position: relative;
-      z-index: 10; /* must be clickable */
+      z-index: 10;
       pointer-events:auto;
     }
     @media (max-width: 520px){
@@ -306,7 +305,6 @@
     }
     .link:hover{ color: #fff; }
 
-    /* Right panel lists */
     .box{
       border:1px solid var(--stroke);
       background: rgba(0,0,0,.16);
@@ -347,7 +345,6 @@
       padding-left: 16px;
     }
 
-    /* Mobile: sidebar becomes collapsible card */
     .sideCollapseToggle{
       display:none;
       width:100%;
@@ -388,7 +385,7 @@
       background: rgba(0,0,0,.18);
       color: var(--muted);
       font-size: 13px;
-      min-width: 180px;
+      min-width: 220px;
       justify-content:space-between;
     }
     .timerBar{
@@ -482,11 +479,9 @@
 <body>
   <div class="wrap">
 
-    <!-- TOP -->
     <div class="topbar">
       <div class="brand">
         <div class="logo" title="Logo">
-          <!-- Put your logo file in the SAME folder as index.html and name it logo.png -->
           <img id="logoImg" src="logo.png" alt="GA logo" onerror="this.style.display='none'; this.parentNode.textContent='GA';" />
         </div>
         <div class="titleblock">
@@ -506,7 +501,6 @@
       <div id="topProgressFill"></div>
     </div>
 
-    <!-- MAIN -->
     <div class="panel" id="mainPanel">
       <div class="pill" id="sectionPill">Vocabulary – Meaning · choose the best answer</div>
 
@@ -515,17 +509,15 @@
 
       <div class="qPrompt" id="qPrompt"></div>
 
-      <!-- MCQ options -->
       <div class="options" id="options"></div>
 
-      <!-- Spelling area -->
       <div class="spellWrap hide" id="spellWrap">
         <div class="spellTop">
           <div style="color:var(--muted); font-size:13px;">
             <b style="color:rgba(255,255,255,.88)">Task:</b> Click the letters to spell the word.
           </div>
           <div class="timerPill">
-            <span>Time left:</span>
+            <span id="timerStatus">Timer starts on your first click</span>
             <b id="timeLeft">15s</b>
           </div>
         </div>
@@ -550,8 +542,8 @@
         </div>
 
         <div class="smallNote" id="spellNote">
-          If you are stuck, use <b>Clue</b> to reveal a letter in the correct place.
-          The timer will show the correct answer when time is up.
+          The timer begins when you click your first letter.
+          If time is up, the correct answer will be shown.
         </div>
       </div>
 
@@ -568,7 +560,6 @@
       </div>
     </div>
 
-    <!-- SIDEBAR -->
     <div class="panel sidebar" id="sidebar">
       <h2>Quick Info</h2>
       <div class="muted">
@@ -636,280 +627,123 @@
       </div>
     </div>
 
-    <!-- Mobile toggle for sidebar -->
     <button class="btn sideCollapseToggle" id="toggleSidebar">Show / hide Quick Info</button>
 
   </div>
 
 <script>
-/* =========================================================
-   DATA (25 total):
-   10 Meaning (MCQ)
-   8 Use (MCQ)
-   5 Spelling (click letters)
-   2 Reading comprehension (MCQ) using same excerpt
-   ========================================================= */
-
 const QUESTIONS = [
-  /* ---------- 10 MEANING ---------- */
-  {
-    type:"mcq",
-    section:"Vocabulary – Meaning",
-    micro:"choose the best answer",
-    prompt:"Which word means:\nA scientist who studies fossils and ancient life on Earth?",
-    correct:"paleontologist",
-    wrong:["pastime","ravine","skull"],
-    hint:"This is a job title. Think: a scientist who studies fossils."
-  },
-  {
-    type:"mcq",
-    section:"Vocabulary – Meaning",
-    micro:"choose the best answer",
-    prompt:"Which word means:\nA deep, narrow valley with steep sides (often hard to climb out of)?",
-    correct:"ravine",
-    wrong:["layers","ash","pastime"],
-    hint:"It is a landform. Picture a steep cut in the ground."
-  },
-  {
-    type:"mcq",
-    section:"Vocabulary – Meaning",
-    micro:"choose the best answer",
-    prompt:"Which phrase means:\nA type of rock formed in layers over time, often under water or from deposits?",
-    correct:"sedimentary rock",
-    wrong:["dinosaur","ash","skull"],
-    hint:"This is a kind of rock. The clue word is “layers”."
-  },
-  {
-    type:"mcq",
-    section:"Vocabulary – Meaning",
-    micro:"choose the best answer",
-    prompt:"Which word means:\nDifferent levels of material stacked on top of each other?",
-    correct:"layers",
-    wrong:["discover","examine","dream"],
-    hint:"Think of a cake with levels, or rocks stacked in levels."
-  },
-  {
-    type:"mcq",
-    section:"Vocabulary – Meaning",
-    micro:"choose the best answer",
-    prompt:"Which word means:\nThe gray powder left after something burns?",
-    correct:"ash",
-    wrong:["skull","pastime","determine"],
-    hint:"You can see this after wood or paper burns."
-  },
-  {
-    type:"mcq",
-    section:"Vocabulary – Meaning",
-    micro:"choose the best answer",
-    prompt:"Which word means:\nThe bones of an animal’s head (the hard part that protects the brain)?",
-    correct:"skull",
-    wrong:["layers","ravine","ash"],
-    hint:"It is part of a body—specifically the head."
-  },
-  {
-    type:"mcq",
-    section:"Vocabulary – Meaning",
-    micro:"choose the best answer",
-    prompt:"Which verb means:\nTo find something for the first time?",
-    correct:"discover",
-    wrong:["examine","determine","dream"],
-    hint:"This happens before you can study it carefully."
-  },
-  {
-    type:"mcq",
-    section:"Vocabulary – Meaning",
-    micro:"choose the best answer",
-    prompt:"Which verb means:\nTo look at something carefully to learn more about it?",
-    correct:"examine",
-    wrong:["discover","excavate","pastime"],
-    hint:"This happens after you find something and want details."
-  },
-  {
-    type:"mcq",
-    section:"Vocabulary – Meaning",
-    micro:"choose the best answer",
-    prompt:"Which verb means:\nTo dig in the ground to find something (like bones or objects)?",
-    correct:"excavate",
-    wrong:["examine","determine","dream"],
-    hint:"This is digging on purpose to find something."
-  },
-  {
-    type:"mcq",
-    section:"Vocabulary – Meaning",
-    micro:"choose the best answer",
-    prompt:"Which word means:\nAn activity you do for fun in your free time?",
-    correct:"pastime",
-    wrong:["ash","ravine","layers"],
-    hint:"This is something you do when you are not working."
-  },
+  // 10 MEANING
+  {type:"mcq", section:"Vocabulary – Meaning", micro:"choose the best answer",
+   prompt:"Which word means:\nA scientist who studies fossils and ancient life on Earth?",
+   correct:"paleontologist", wrong:["pastime","ravine","skull"],
+   hint:"This is a job title. Think: a scientist who studies fossils."},
+  {type:"mcq", section:"Vocabulary – Meaning", micro:"choose the best answer",
+   prompt:"Which word means:\nA deep, narrow valley with steep sides (often hard to climb out of)?",
+   correct:"ravine", wrong:["layers","ash","pastime"],
+   hint:"It is a landform. Picture a steep cut in the ground."},
+  {type:"mcq", section:"Vocabulary – Meaning", micro:"choose the best answer",
+   prompt:"Which phrase means:\nA type of rock formed in layers over time, often under water or from deposits?",
+   correct:"sedimentary rock", wrong:["dinosaur","ash","skull"],
+   hint:"This is a kind of rock. The clue word is “layers”."},
+  {type:"mcq", section:"Vocabulary – Meaning", micro:"choose the best answer",
+   prompt:"Which word means:\nDifferent levels of material stacked on top of each other?",
+   correct:"layers", wrong:["discover","examine","dream"],
+   hint:"Think of a cake with levels, or rocks stacked in levels."},
+  {type:"mcq", section:"Vocabulary – Meaning", micro:"choose the best answer",
+   prompt:"Which word means:\nThe gray powder left after something burns?",
+   correct:"ash", wrong:["skull","pastime","determine"],
+   hint:"You can see this after wood or paper burns."},
+  {type:"mcq", section:"Vocabulary – Meaning", micro:"choose the best answer",
+   prompt:"Which word means:\nThe bones of an animal’s head (the hard part that protects the brain)?",
+   correct:"skull", wrong:["layers","ravine","ash"],
+   hint:"It is part of a body—specifically the head."},
+  {type:"mcq", section:"Vocabulary – Meaning", micro:"choose the best answer",
+   prompt:"Which verb means:\nTo find something for the first time?",
+   correct:"discover", wrong:["examine","determine","dream"],
+   hint:"This happens before you can study it carefully."},
+  {type:"mcq", section:"Vocabulary – Meaning", micro:"choose the best answer",
+   prompt:"Which verb means:\nTo look at something carefully to learn more about it?",
+   correct:"examine", wrong:["discover","excavate","pastime"],
+   hint:"This happens after you find something and want details."},
+  {type:"mcq", section:"Vocabulary – Meaning", micro:"choose the best answer",
+   prompt:"Which verb means:\nTo dig in the ground to find something (like bones or objects)?",
+   correct:"excavate", wrong:["examine","determine","dream"],
+   hint:"This is digging on purpose to find something."},
+  {type:"mcq", section:"Vocabulary – Meaning", micro:"choose the best answer",
+   prompt:"Which word means:\nAn activity you do for fun in your free time?",
+   correct:"pastime", wrong:["ash","ravine","layers"],
+   hint:"This is something you do when you are not working."},
 
-  /* ---------- 8 USE ---------- */
-  {
-    type:"mcq",
-    section:"Vocabulary – Use",
-    micro:"choose the best word",
-    prompt:"In 2003, scientists __________ dinosaur bones near the village.",
-    correct:"discovered",
-    wrong:["dream","layers","ash"],
-    hint:"The sentence is about finding something for the first time (past tense)."
-  },
-  {
-    type:"mcq",
-    section:"Vocabulary – Use",
-    micro:"choose the best word",
-    prompt:"The paleontologist came to the ravine and __________ the boy’s discovery carefully.",
-    correct:"examined",
-    wrong:["tripped","dreamed","layers"],
-    hint:"The sentence is about looking carefully to learn more (past tense)."
-  },
-  {
-    type:"mcq",
-    section:"Vocabulary – Use",
-    micro:"choose the best word",
-    prompt:"Soon, many paleontologists began __________ the area around the bone to find more pieces.",
-    correct:"excavating",
-    wrong:["discover","determined","favorite"],
-    hint:"After they find a bone, they dig around it (verb + -ing after began)."
-  },
-  {
-    type:"mcq",
-    section:"Vocabulary – Use",
-    micro:"choose the best word",
-    prompt:"Javier __________ on a rough, gray object sticking out of the ground.",
-    correct:"tripped",
-    wrong:["discovered","examined","layers"],
-    hint:"This verb describes what happens when your foot catches on something."
-  },
-  {
-    type:"mcq",
-    section:"Vocabulary – Use",
-    micro:"choose the best word",
-    prompt:"Scientists used volcanic ash in different rock layers to __________ how old the bone was.",
-    correct:"determine",
-    wrong:["dream","excavate","skull"],
-    hint:"This verb means “to find out / decide after checking information.”"
-  },
-  {
-    type:"mcq",
-    section:"Vocabulary – Use",
-    micro:"choose the best word",
-    prompt:"When Javier was alive today, his __________ pastime was to explore the hills and open fields.",
-    correct:"favorite",
-    wrong:["sedimentary rock","ash","determine"],
-    hint:"This word means “the one he liked the most.”"
-  },
-  {
-    type:"mcq",
-    section:"Vocabulary – Use",
-    micro:"choose the best word",
-    prompt:"Javier’s __________ was to be the first person to find a dinosaur bone near his town.",
-    correct:"dream",
-    wrong:["layers","skull","pastime"],
-    hint:"This is something he strongly hoped would happen."
-  },
-  {
-    type:"mcq",
-    section:"Vocabulary – Use",
-    micro:"choose the best word",
-    prompt:"The bone was buried in __________ rock, which lies in layers under the ground.",
-    correct:"sedimentary",
-    wrong:["dinosaur","favorite","ash"],
-    hint:"This word describes rock formed from deposits that often build up in layers."
-  },
+  // 8 USE
+  {type:"mcq", section:"Vocabulary – Use", micro:"choose the best word",
+   prompt:"In 2003, scientists __________ dinosaur bones near the village.",
+   correct:"discovered", wrong:["dream","layers","ash"],
+   hint:"The sentence is about finding something for the first time (past tense)."},
+  {type:"mcq", section:"Vocabulary – Use", micro:"choose the best word",
+   prompt:"The paleontologist came to the ravine and __________ the boy’s discovery carefully.",
+   correct:"examined", wrong:["tripped","dreamed","layers"],
+   hint:"The sentence is about looking carefully to learn more (past tense)."},
+  {type:"mcq", section:"Vocabulary – Use", micro:"choose the best word",
+   prompt:"Soon, many paleontologists began __________ the area around the bone to find more pieces.",
+   correct:"excavating", wrong:["discover","determined","favorite"],
+   hint:"After they find a bone, they dig around it (verb + -ing after began)."},
+  {type:"mcq", section:"Vocabulary – Use", micro:"choose the best word",
+   prompt:"Javier __________ on a rough, gray object sticking out of the ground.",
+   correct:"tripped", wrong:["discovered","examined","layers"],
+   hint:"This verb describes what happens when your foot catches on something."},
+  {type:"mcq", section:"Vocabulary – Use", micro:"choose the best word",
+   prompt:"Scientists used volcanic ash in different rock layers to __________ how old the bone was.",
+   correct:"determine", wrong:["dream","excavate","skull"],
+   hint:"This verb means “to find out / decide after checking information.”"},
+  {type:"mcq", section:"Vocabulary – Use", micro:"choose the best word",
+   prompt:"Javier’s __________ pastime was to explore the hills and open fields.",
+   correct:"favorite", wrong:["sedimentary rock","ash","determine"],
+   hint:"This word means “the one he liked the most.”"},
+  {type:"mcq", section:"Vocabulary – Use", micro:"choose the best word",
+   prompt:"Javier’s __________ was to be the first person to find a dinosaur bone near his town.",
+   correct:"dream", wrong:["layers","skull","pastime"],
+   hint:"This is something he strongly hoped would happen."},
+  {type:"mcq", section:"Vocabulary – Use", micro:"choose the best word",
+   prompt:"The bone was buried in __________ rock, which lies in layers under the ground.",
+   correct:"sedimentary", wrong:["dinosaur","favorite","ash"],
+   hint:"This word describes rock formed from deposits that often build up in layers."},
 
-  /* ---------- 5 SPELLING (CLICK LETTERS) ---------- */
-  {
-    type:"spell",
-    section:"Vocabulary – Spelling",
-    micro:"click letters to spell",
-    prompt:"Spelling:\nA scientist who studies fossils and ancient life on Earth.",
-    answer:"paleontologist",
-    hint:"Think: a job title for fossil scientists."
-  },
-  {
-    type:"spell",
-    section:"Vocabulary – Spelling",
-    micro:"click letters to spell",
-    prompt:"Spelling:\nA deep, narrow valley with steep sides.",
-    answer:"ravine",
-    hint:"A landform—like a steep cut in the ground."
-  },
-  {
-    type:"spell",
-    section:"Vocabulary – Spelling",
-    micro:"click letters to spell",
-    prompt:"Spelling:\nTo dig in the ground to find objects or bones.",
-    answer:"excavate",
-    hint:"This is “digging on purpose to find something.”"
-  },
-  {
-    type:"spell",
-    section:"Vocabulary – Spelling",
-    micro:"click letters to spell",
-    prompt:"Spelling:\nTo find out the answer using evidence or facts.",
-    answer:"determine",
-    hint:"You do this after checking information."
-  },
-  {
-    type:"spell",
-    section:"Vocabulary – Spelling",
-    micro:"click letters to spell",
-    prompt:"Spelling:\nThe one you like the most.",
-    answer:"favorite",
-    hint:"This describes your top choice."
-  },
+  // 5 SPELLING
+  {type:"spell", section:"Vocabulary – Spelling", micro:"click letters to spell",
+   prompt:"Spelling:\nA scientist who studies fossils and ancient life on Earth.",
+   answer:"paleontologist", hint:"Think: a job title for fossil scientists."},
+  {type:"spell", section:"Vocabulary – Spelling", micro:"click letters to spell",
+   prompt:"Spelling:\nA deep, narrow valley with steep sides.",
+   answer:"ravine", hint:"A landform—like a steep cut in the ground."},
+  {type:"spell", section:"Vocabulary – Spelling", micro:"click letters to spell",
+   prompt:"Spelling:\nTo dig in the ground to find objects or bones.",
+   answer:"excavate", hint:"This is “digging on purpose to find something.”"},
+  {type:"spell", section:"Vocabulary – Spelling", micro:"click letters to spell",
+   prompt:"Spelling:\nTo find out the answer using evidence or facts.",
+   answer:"determine", hint:"You do this after checking information."},
+  {type:"spell", section:"Vocabulary – Spelling", micro:"click letters to spell",
+   prompt:"Spelling:\nThe one you like the most.",
+   answer:"favorite", hint:"This describes your top choice."},
 
-  /* ---------- 2 READING COMPREHENSION (same excerpt) ---------- */
-  {
-    type:"mcq",
-    section:"Reading Comprehension",
-    micro:"use the excerpt evidence",
-    prompt:
-`Read the excerpt and answer:\n\n` +
-`Excerpt:\n` +
-`"Javier tripped on a rough, gray object sticking out of the ground. ` +
-`He didn’t think it was a rock. The next day, a paleontologist came and examined the discovery."\n\n` +
-`Question:\nWhy did Javier’s father contact the mayor and a science foundation?`,
-    correct:"Because they needed an expert to check what the object really was.",
-    wrong:[
-      "Because Javier wanted to name the dinosaur right away.",
-      "Because the boys wanted to keep the object as treasure.",
-      "Because they needed a map to find the village."
-    ],
-    hint:"Look for what happens next: an expert arrives to examine the discovery."
-  },
-  {
-    type:"mcq",
-    section:"Reading Comprehension",
-    micro:"use the excerpt evidence",
-    prompt:
-`Read the excerpt and answer:\n\n` +
-`Excerpt:\n` +
-`"This bone was buried in sedimentary rock, which lies in layers under the ground. ` +
-`We’ll look for volcanic ash below and above this rock layer. ` +
-`Through a special process, we can find out the ages of those layers of ash."\n\n` +
-`Question:\nWhat is the main reason scientists look at ash above and below the rock layer?`,
-    correct:"To estimate the bone’s age by comparing the ages of the ash layers.",
-    wrong:[
-      "To make the bone look cleaner before taking pictures.",
-      "To find out which dinosaur had the biggest skull.",
-      "To prove the rock is not sedimentary rock."
-    ],
-    hint:"The excerpt explains a method: use the ages of ash layers to figure out time."
-  }
+  // 2 READING
+  {type:"mcq", section:"Reading Comprehension", micro:"use the excerpt evidence",
+   prompt:
+`Read the excerpt and answer:\n\nExcerpt:\n"Javier tripped on a rough, gray object sticking out of the ground. He didn’t think it was a rock. The next day, a paleontologist came and examined the discovery."\n\nQuestion:\nWhy did Javier’s father contact the mayor and a science foundation?`,
+   correct:"Because they needed an expert to check what the object really was.",
+   wrong:["Because Javier wanted to name the dinosaur right away.","Because the boys wanted to keep the object as treasure.","Because they needed a map to find the village."],
+   hint:"Look for what happens next: an expert arrives to examine the discovery."},
+  {type:"mcq", section:"Reading Comprehension", micro:"use the excerpt evidence",
+   prompt:
+`Read the excerpt and answer:\n\nExcerpt:\n"This bone was buried in sedimentary rock, which lies in layers under the ground. We’ll look for volcanic ash below and above this rock layer. Through a special process, we can find out the ages of those layers of ash."\n\nQuestion:\nWhat is the main reason scientists look at ash above and below the rock layer?`,
+   correct:"To estimate the bone’s age by comparing the ages of the ash layers.",
+   wrong:["To make the bone look cleaner before taking pictures.","To find out which dinosaur had the biggest skull.","To prove the rock is not sedimentary rock."],
+   hint:"The excerpt explains a method: use the ages of ash layers to figure out time."}
 ];
 
-// Ensure total 25
-if (QUESTIONS.length !== 25) {
-  console.warn("Question count is not 25. Current:", QUESTIONS.length);
-}
-
-/* =========================================================
-   STATE
-   ========================================================= */
 let mainIndex = 0;
 let correctCount = 0;
-let mode = "Main";         // Main | Review | Done
+let mode = "Main";
 let reviewQueue = [];
 let reviewPos = 0;
 let currentQ = null;
@@ -917,17 +751,14 @@ let currentQ = null;
 let attempts = 0;
 let answeredCorrect = false;
 
-// spelling state
+// spelling
 let spellTimer = null;
-let spellTimeLeft = 15;
 let spellLocked = false;
-let spellRevealed = [];     // boolean per slot
-let spellBuilt = [];        // char per slot ('' for empty)
-let letterButtons = [];     // refs
+let spellRevealed = [];
+let spellBuilt = [];
+let letterButtons = [];
+let timerStarted = false;
 
-/* =========================================================
-   ELEMENTS
-   ========================================================= */
 const chipProgress = document.getElementById("chipProgress");
 const chipCorrect = document.getElementById("chipCorrect");
 const chipMode = document.getElementById("chipMode");
@@ -954,14 +785,12 @@ const btnCheckSpell = document.getElementById("btnCheckSpell");
 const btnTryAgainSpell = document.getElementById("btnTryAgainSpell");
 const timeLeftEl = document.getElementById("timeLeft");
 const timerFill = document.getElementById("timerFill");
+const timerStatus = document.getElementById("timerStatus");
 
 const sidebar = document.getElementById("sidebar");
 const toggleSidebar = document.getElementById("toggleSidebar");
 const vocabBox = document.getElementById("vocabBox");
 
-/* =========================================================
-   HELPERS
-   ========================================================= */
 function shuffle(arr){
   const a = arr.slice();
   for(let i=a.length-1;i>0;i--){
@@ -975,7 +804,6 @@ function setMode(newMode){
   chipMode.textContent = newMode;
 }
 function totalProgressText(){
-  // In Main: 1..25. In Review: show review position
   if (mode === "Main") return `${mainIndex+1}/25`;
   if (mode === "Review") return `Review ${reviewPos+1}/${reviewQueue.length}`;
   return `25/25`;
@@ -983,23 +811,17 @@ function totalProgressText(){
 function updateHeader(){
   chipCorrect.textContent = String(correctCount);
   chipProgress.textContent = totalProgressText();
-
-  // progress bar should reflect MAIN only (simple, and matches what students expect)
   const mainProgress = Math.min(25, mainIndex+1);
   const pct = (mainProgress / 25) * 100;
   topProgressFill.style.width = pct + "%";
 }
 
-/* =========================================================
-   RENDER
-   ========================================================= */
 function renderQuestion(){
   answeredCorrect = false;
   attempts = 0;
   btnNext.disabled = true;
   btnHint.disabled = false;
 
-  // determine current question index
   let qIndex = 0;
   if (mode === "Main") {
     qIndex = mainIndex;
@@ -1012,10 +834,8 @@ function renderQuestion(){
     return;
   }
 
-  // section pill
   sectionPill.textContent = `${currentQ.section} · ${currentQ.micro}`;
 
-  // title
   if (mode === "Main"){
     qCountTag.textContent = `Question ${mainIndex+1} of 25`;
     qTitle.textContent = `Question ${mainIndex+1} of 25`;
@@ -1026,17 +846,14 @@ function renderQuestion(){
 
   qPrompt.textContent = currentQ.prompt;
 
-  // reset feedback
   feedbackEl.className = "feedback";
   feedbackEl.innerHTML = `Hint: If you are not sure, click <b>Show hint</b> and read carefully. Click <b>Next</b> only when you understand.`;
 
-  // toggle spelling UI / options
   stopSpellTimer();
   if (currentQ.type === "spell"){
     optionsEl.innerHTML = "";
     optionsEl.classList.add("hide");
     spellWrap.classList.remove("hide");
-    // hide vocab list during spelling
     vocabBox.classList.add("hide");
     initSpelling(currentQ);
   } else {
@@ -1050,26 +867,21 @@ function renderQuestion(){
 }
 
 function renderMCQ(q){
-  // Build shuffled options with correct index
   const opts = shuffle([q.correct, ...q.wrong]);
-
   optionsEl.innerHTML = "";
   opts.forEach((text) => {
     const b = document.createElement("button");
     b.className = "option";
     b.type = "button";
     b.textContent = text;
-    // ensure clickable on mobile
     b.style.pointerEvents = "auto";
     b.style.zIndex = "10";
-
-    b.addEventListener("click", () => handleMCQChoice(b, text, q.correct, opts));
+    b.addEventListener("click", () => handleMCQChoice(b, text, q.correct));
     optionsEl.appendChild(b);
   });
 }
 
 function smilesForAttempt(attemptNumber){
-  // attemptNumber is 1 for first try, 2 for second, 3+ for later
   if (attemptNumber === 1) return "🙂🙂🙂";
   if (attemptNumber === 2) return "🙂🙂";
   return "🙂";
@@ -1077,32 +889,23 @@ function smilesForAttempt(attemptNumber){
 
 function handleMCQChoice(btn, chosenText, correctText){
   if (answeredCorrect) return;
-
   attempts++;
-
   const buttons = Array.from(document.querySelectorAll("button.option"));
 
   if (chosenText === correctText){
     answeredCorrect = true;
-    // mark correct
     btn.classList.add("correct");
     buttons.forEach(b => b.disabled = true);
-
-    // scoring: count as correct during MAIN only
     if (mode === "Main") correctCount++;
 
     feedbackEl.className = "feedback good";
     feedbackEl.innerHTML = `<b>Correct.</b> Nice work.<span class="smiles"> ${smilesForAttempt(attempts)}</span><br><span style="color:var(--muted)">Click <b>Next</b> when you are ready.</span>`;
     btnNext.disabled = false;
     btnHint.disabled = true;
-
   } else {
-    // Wrong: do not auto-reveal; give a context clue
     btn.classList.add("wrong");
-    // keep others active so they can try again, but don't let them spam this same one
     btn.disabled = true;
 
-    // if this happened in MAIN, add to review list once
     if (mode === "Main"){
       const idx = mainIndex;
       if (!reviewQueue.includes(idx)) reviewQueue.push(idx);
@@ -1115,37 +918,33 @@ function handleMCQChoice(btn, chosenText, correctText){
   }
 }
 
-/* =========================================================
-   SPELLING (click letters) with 15s timer + countdown bar
-   ========================================================= */
+/* =========================
+   SPELLING: timer starts on FIRST letter click
+   ========================= */
 function initSpelling(q){
-  // reset states
   spellLocked = false;
-  spellTimeLeft = 15;
-  timeLeftEl.textContent = spellTimeLeft + "s";
+  timerStarted = false;
+
+  timeLeftEl.textContent = "15s";
   timerFill.style.width = "100%";
+  timerStatus.textContent = "Timer starts on your first click";
 
   const answer = q.answer.toLowerCase().trim();
-  const lettersOnly = answer; // single word only in our spelling set
 
-  // slots: underscores (no letters shown at start)
-  spellRevealed = Array(lettersOnly.length).fill(false);
-  spellBuilt = Array(lettersOnly.length).fill("");
+  spellRevealed = Array(answer.length).fill(false);
+  spellBuilt = Array(answer.length).fill("");
 
   renderSlots();
 
-  // Build letter bank: exact letters + 2 distractors not over-helpful
-  const baseLetters = lettersOnly.split("");
+  const baseLetters = answer.split("");
   const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
   const distractors = [];
   while(distractors.length < 2){
     const pick = alphabet[Math.floor(Math.random()*alphabet.length)];
-    // avoid adding extra of a very rare letter already heavily present
     if (!distractors.includes(pick) && !baseLetters.includes(pick)) distractors.push(pick);
   }
   const bank = shuffle([...baseLetters, ...distractors]);
 
-  // render letter buttons
   lettersEl.innerHTML = "";
   letterButtons = [];
   bank.forEach((ch) => {
@@ -1154,52 +953,42 @@ function initSpelling(q){
     b.type = "button";
     b.textContent = ch.toUpperCase();
     b.disabled = false;
-    b.style.pointerEvents = "auto";
-    b.style.zIndex = "10";
 
     b.addEventListener("click", () => {
       if (spellLocked) return;
+
+      // START TIMER ON FIRST CLICK
+      if (!timerStarted){
+        timerStarted = true;
+        timerStatus.textContent = "Time left:";
+        startSpellTimer(answer);
+      }
+
       placeNextLetter(ch, b);
     });
+
     lettersEl.appendChild(b);
     letterButtons.push(b);
   });
 
-  // buttons
   btnBack.disabled = false;
   btnClear.disabled = false;
   btnClue.disabled = false;
   btnCheckSpell.disabled = false;
   btnTryAgainSpell.style.display = "none";
 
-  btnBack.onclick = () => {
-    if (spellLocked) return;
-    backspaceLetter();
-  };
-  btnClear.onclick = () => {
-    if (spellLocked) return;
-    clearNonRevealed();
-  };
-  btnClue.onclick = () => {
-    if (spellLocked) return;
-    revealOneLetter(answer);
-  };
-  btnCheckSpell.onclick = () => {
-    if (spellLocked) return;
-    checkSpelling(answer, false);
-  };
+  btnBack.onclick = () => { if (!spellLocked) backspaceLetter(); };
+  btnClear.onclick = () => { if (!spellLocked) clearNonRevealed(); };
+  btnClue.onclick = () => { if (!spellLocked) revealOneLetter(answer); };
+  btnCheckSpell.onclick = () => { if (!spellLocked) checkSpelling(answer, false); };
   btnTryAgainSpell.onclick = () => {
     if (spellLocked) return;
-    // keep revealed letters, clear the rest + re-enable letter buttons
     clearNonRevealed();
     enableAllLetterButtons();
     btnTryAgainSpell.style.display = "none";
     feedbackEl.className = "feedback";
     feedbackEl.innerHTML = `<b>Try again.</b> Use the slots and click letters carefully. You may use <b>Clue</b> if needed.`;
   };
-
-  // start timer AFTER rendering (prevents "time lost before clickable")
-  startSpellTimer(answer);
 }
 
 function renderSlots(){
@@ -1215,32 +1004,24 @@ function renderSlots(){
 function nextEmptyIndex(){
   for(let i=0;i<spellBuilt.length;i++){
     if (!spellBuilt[i] && !spellRevealed[i]) return i;
-    if (!spellBuilt[i] && spellRevealed[i]) continue;
   }
-  // if all non-revealed are filled, allow filling revealed? no. just stop.
   return -1;
 }
 
 function placeNextLetter(ch, buttonRef){
   const idx = nextEmptyIndex();
   if (idx === -1) return;
-
   spellBuilt[idx] = ch;
   renderSlots();
-
-  // disable the specific clicked tile once used
   buttonRef.disabled = true;
 }
 
 function backspaceLetter(){
-  // remove the last non-revealed filled slot
   for(let i=spellBuilt.length-1;i>=0;i--){
     if (spellRevealed[i]) continue;
     if (spellBuilt[i]){
-      // re-enable one matching letter button
       const ch = spellBuilt[i].toLowerCase();
       spellBuilt[i] = "";
-      // re-enable one disabled button with that letter
       const btn = letterButtons.find(b => b.disabled && b.textContent.toLowerCase() === ch);
       if (btn) btn.disabled = false;
       renderSlots();
@@ -1261,7 +1042,6 @@ function enableAllLetterButtons(){
 }
 
 function revealOneLetter(answer){
-  // choose a random unrevealed position that is not correct yet
   const candidates = [];
   for(let i=0;i<answer.length;i++){
     if (!spellRevealed[i]) candidates.push(i);
@@ -1283,7 +1063,6 @@ function builtString(){
 
 function checkSpelling(answer, fromTimeUp){
   attempts++;
-
   const current = builtString();
 
   if (current === answer){
@@ -1291,7 +1070,6 @@ function checkSpelling(answer, fromTimeUp){
     spellLocked = true;
     stopSpellTimer();
 
-    // disable all letter buttons and spelling controls
     letterButtons.forEach(b => b.disabled = true);
     btnBack.disabled = true;
     btnClear.disabled = true;
@@ -1310,14 +1088,12 @@ function checkSpelling(answer, fromTimeUp){
     return;
   }
 
-  // Wrong spelling
   if (mode === "Main"){
     const idx = mainIndex;
     if (!reviewQueue.includes(idx)) reviewQueue.push(idx);
   }
 
   if (fromTimeUp){
-    // show full answer and lock
     for(let i=0;i<answer.length;i++){
       spellBuilt[i] = answer[i];
       spellRevealed[i] = true;
@@ -1339,7 +1115,6 @@ function checkSpelling(answer, fromTimeUp){
     return;
   }
 
-  // Allow Try again with a meaningful clue (no free letters unless they request Clue)
   feedbackEl.className = "feedback bad";
   feedbackEl.innerHTML =
     `<b>Not yet.</b> Click <b>Try again</b> and rebuild the word.<br>` +
@@ -1349,10 +1124,6 @@ function checkSpelling(answer, fromTimeUp){
 
 function startSpellTimer(answer){
   stopSpellTimer();
-  spellTimeLeft = 15;
-  timeLeftEl.textContent = spellTimeLeft + "s";
-  timerFill.style.width = "100%";
-
   const totalMs = 15000;
   const start = Date.now();
 
@@ -1369,7 +1140,6 @@ function startSpellTimer(answer){
 
     if (remain <= 0){
       stopSpellTimer();
-      // time up: show answer
       checkSpelling(answer, true);
     }
   }, 90);
@@ -1382,14 +1152,10 @@ function stopSpellTimer(){
   }
 }
 
-/* =========================================================
-   NAVIGATION
-   ========================================================= */
 btnNext.addEventListener("click", () => {
   if (mode === "Main"){
     mainIndex++;
     if (mainIndex >= 25){
-      // start review if needed
       if (reviewQueue.length > 0){
         setMode("Review");
         reviewPos = 0;
@@ -1415,8 +1181,6 @@ btnNext.addEventListener("click", () => {
 
 btnHint.addEventListener("click", () => {
   if (!currentQ) return;
-
-  // In MCQ: give clue; In spelling: give hint (not letters)
   if (currentQ.type === "mcq"){
     feedbackEl.className = "feedback";
     feedbackEl.innerHTML = `<b>Hint:</b> ${currentQ.hint}`;
@@ -1439,14 +1203,10 @@ btnReset.addEventListener("click", () => {
   renderQuestion();
 });
 
-/* Sidebar toggle (mobile) */
 toggleSidebar.addEventListener("click", () => {
   sidebar.classList.toggle("open");
 });
 
-/* =========================================================
-   DONE SCREEN
-   ========================================================= */
 function renderDone(){
   stopSpellTimer();
   vocabBox.classList.remove("hide");
@@ -1463,7 +1223,6 @@ function renderDone(){
     "If you missed any questions, the Review mode helped you practice them again.\n" +
     "You can reset (teacher) to practice again.";
 
-  // show a simple summary
   const missed = reviewQueue.length;
   feedbackEl.className = "feedback";
   feedbackEl.innerHTML =
@@ -1471,19 +1230,12 @@ function renderDone(){
     `<b>Questions that needed review:</b> ${missed}<br>` +
     `<span style="color:var(--muted)">Tip: Re-read the story and focus on the highlighted vocabulary words.</span>`;
 
-  // progress bar full
   topProgressFill.style.width = "100%";
   chipProgress.textContent = "25/25";
   chipMode.textContent = "Done";
   chipCorrect.textContent = String(correctCount);
 }
 
-/* =========================================================
-   FIX: ensure options are never all correct-first.
-   This file shuffles every time; also make sure all layers allow taps.
-   ========================================================= */
-
-/* Start */
 setMode("Main");
 renderQuestion();
 </script>
